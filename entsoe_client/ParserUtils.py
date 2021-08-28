@@ -2,7 +2,7 @@
 import logging
 from io import BytesIO
 from typing import Callable, Dict, List
-from zipfile import ZipFile, ZipInfo
+from zipfile import ZipFile
 
 import pandas as pd
 import requests
@@ -15,7 +15,7 @@ def validate_timedeltas(filetype_parser: Callable[[requests.Response], pd.DataFr
     TODO: Expand the logging to a validation functionality.
     """
 
-    def filetype_parser_wrapper(response):
+    def parser_wrapper(response):
         df = filetype_parser(response)
         unique_timedeltas = df.index.to_series().diff().value_counts()
         log_msg = f"Unique pd.Timedelta counts:\n{unique_timedeltas}"
@@ -27,34 +27,45 @@ def validate_timedeltas(filetype_parser: Callable[[requests.Response], pd.DataFr
             logging.debug(log_msg)
         return df
 
-    return filetype_parser_wrapper
+    return parser_wrapper
 
 
 @validate_timedeltas
 def parse_zip(response: requests.Response) -> pd.DataFrame:
     archive = ZipFile(BytesIO(response.content), 'r')
-    files = archive.infolist()
+    files = [archive.read(file).decode() for file in archive.infolist()]
     logging.debug(f"Files in response: {files}")
-    File_to_DataFrame = ZipFile_to_DataFrame_func(archive)
-    dataframe_list = map(File_to_DataFrame, files)
+    Period_to_DataFrame = Period_to_DataFrame_fn(get_Period_data)
+    TimeSeries_to_DataFrame = TimeSeries_to_DataFrame_fn(Period_to_DataFrame)
+    Response_to_DataFrame = Response_to_DataFrame_fn(TimeSeries_to_DataFrame)
+    dataframe_list = [*map(Response_to_DataFrame, files)]
     df = pd.concat(dataframe_list, axis=0).sort_index()
     return df
-
-
-def ZipFile_to_DataFrame_func(archive: ZipFile) -> Callable[[ZipInfo], pd.DataFrame]:
-    def _file_to_dataframe(file: ZipInfo):
-        response_text = archive.read(file).decode()
-        Response_to_DataFrame = common_Response_to_DataFrame()
-        return Response_to_DataFrame(response_text)
-
-    return _file_to_dataframe
 
 
 @validate_timedeltas
 def parse_text_xml(response: requests.Response) -> pd.DataFrame:
     response_text = response.text
-    Response_to_DataFrame = common_Response_to_DataFrame()
+    Period_to_DataFrame = Period_to_DataFrame_fn(get_Period_data)
+    TimeSeries_to_DataFrame = TimeSeries_to_DataFrame_fn(Period_to_DataFrame)
+    Response_to_DataFrame = Response_to_DataFrame_fn(TimeSeries_to_DataFrame)
     df = Response_to_DataFrame(response_text)
+    return df
+
+
+def parse_outages(response: requests.Response) -> pd.DataFrame:
+    """
+    Outages responses do not contain `Periods` under the TimeSeries node.
+    A `TimeSeries` node has to be unfolded and normalized to a single row.
+    Further, they come as ZipFiles.
+    """
+    archive = ZipFile(BytesIO(response.content), 'r')
+    files = [archive.read(file).decode() for file in archive.infolist()]
+    logging.debug(f"Files in response: {files}")
+    TimeSeries_to_DataFrame = lambda TimeSeries: pd.json_normalize(dict([unfold_node(TimeSeries)]))
+    Response_to_DataFrame = Response_to_DataFrame_fn(TimeSeries_to_DataFrame)
+    dataframe_list = [*map(Response_to_DataFrame, files)]
+    df = pd.concat(dataframe_list, axis=0).sort_index()
     return df
 
 
@@ -120,21 +131,12 @@ def parse_flowbasedparameters(response: requests.Response) -> pd.DataFrame:
     df = Response_to_DataFrame(response_text)
     return df
 
+
 def drop_xml_encoding_line(xml_text: str) -> str:
     return "\n".join(xml_text.split('\n')[1:])
 
-def common_Response_to_DataFrame() -> Callable[[str], pd.DataFrame]:
-    """
-    Avoids boilerplate code for `typical` parsers, e.g. such returning timeseries shaped data,
-    where there is some metadata in each `TimeSeries` node with many `Points` under `Period`.
-    """
-    Period_to_DataFrame = Period_to_DataFrame_fn(get_Period_data)
-    TimeSeries_to_DataFrame = TimeSeries_to_DataFrame_fn(Period_to_DataFrame)
-    Response_to_DataFrame = Response_to_DataFrame_fn(TimeSeries_to_DataFrame)
-    return Response_to_DataFrame
 
 def Response_to_DataFrame_fn(TimeSeries_to_DataFrame: Callable) -> Callable[[str], pd.DataFrame]:
-
     def Response_to_DataFrame(response_text: str) -> pd.DataFrame:
         """
         """
@@ -145,7 +147,7 @@ def Response_to_DataFrame_fn(TimeSeries_to_DataFrame: Callable) -> Callable[[str
         # logging.info(f"Start: {get_response_timeinterval('start')}, End: {get_response_timeinterval('end')}")
 
         TimeSeries_list = root.findall("TimeSeries", root.nsmap)
-        TimeSeries_dfs = map(TimeSeries_to_DataFrame, TimeSeries_list)
+        TimeSeries_dfs = [*map(TimeSeries_to_DataFrame, TimeSeries_list)]
         df = pd.concat(TimeSeries_dfs, axis=0)
         return df
 
@@ -153,7 +155,6 @@ def Response_to_DataFrame_fn(TimeSeries_to_DataFrame: Callable) -> Callable[[str
 
 
 def TimeSeries_to_DataFrame_fn(Period_to_DataFrame: Callable) -> Callable:
-
     def TimeSeries_to_DataFrame(TimeSeries: etree._Element) -> pd.DataFrame:
         # BIG TODO: 4.2.4. Flow-based Parameters [11.1.B] seems particularly convoluted.
         periods = TimeSeries.findall(".//Period", TimeSeries.nsmap)
@@ -167,7 +168,7 @@ def TimeSeries_to_DataFrame_fn(Period_to_DataFrame: Callable) -> Callable:
     return TimeSeries_to_DataFrame
 
 
-def unfold_node(node: etree._Element) -> tuple[str, dict[str, dict[str, ]]]:
+def unfold_node(node: etree._Element) -> tuple[str, dict[str, dict[str,]]]:
     """
     Recursive unfolding of a node into a dict.
     TODO: Ensure no overwriting of same dict-names in the unfolding.
@@ -181,7 +182,6 @@ def unfold_node(node: etree._Element) -> tuple[str, dict[str, dict[str, ]]]:
 
 
 def Period_to_DataFrame_fn(get_Period_data: Callable) -> Callable:
-
     def Period_to_DataFrame(Period: etree._Element) -> pd.DataFrame:
         """
         Periods are implcitly valid as index is constructed independent from data extraction.

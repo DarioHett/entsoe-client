@@ -36,7 +36,8 @@ class Query:
                  update_DateAndOrTime=None,
                  implementation_DateAndOrTime=None,  # Does not appear in Documentation; MasterData.
                  Area_Domain=None,  # Does not appear in documentation.
-                 offset=None
+                 offset=None,
+                 mRID=None
                  ):
         """
         Appendix A: Complete parameter list
@@ -70,6 +71,7 @@ class Query:
         self.Area_Domain = Area_Domain
         self.implementation_DateAndOrTime=implementation_DateAndOrTime
         self.offset = offset
+        self.mRID = mRID
 
     def __call__(self) -> Dict:
         _ = self.__dict__

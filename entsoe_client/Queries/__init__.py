@@ -5,3 +5,4 @@ import entsoe_client.Queries.Congestion
 import entsoe_client.Queries.MasterData
 import entsoe_client.Queries.Generation
 import entsoe_client.Queries.Balancing
+import entsoe_client.Queries.Outages
