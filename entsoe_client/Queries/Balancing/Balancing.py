@@ -261,7 +261,7 @@ class AcceptedAggregatedOffers(Balancing):
             periodStart=periodStart,
             periodEnd=periodEnd,
             businessType=businessType,
-            psrType=psrType,
+            psrType=psrType
         )
 
 
@@ -296,7 +296,7 @@ class ActivatedBalancingEnergy(Balancing):
             periodStart=periodStart,
             periodEnd=periodEnd,
             businessType=businessType,
-            psrType=psrType,
+            psrType=psrType
         )
 
 class PricesOfActivatedBalancingEnergy(Balancing):
@@ -357,5 +357,244 @@ class ImbalancePrices(Balancing):
             controlArea_Domain=controlArea_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
-            psrType=psrType,
+            psrType=psrType
         )
+
+class TotalImbalanceVolumes(Balancing):
+    """
+    4.6.11. Total Imbalance Volumes [17.1.H]
+    One year range limit applies
+    Minimum time interval in query response is one BTU period
+    Mandatory parameters
+        DocumentType
+        ControlArea_Domain
+        TimeInterval or combination of PeriodStart and PeriodEnd
+    """
+    def __init__(
+            self,
+            controlArea_Domain: Area = None,
+            periodStart=None,
+            periodEnd=None
+    ):
+        super(TotalImbalanceVolumes, self).__init__(
+            documentType=DocumentType.A86,
+            controlArea_Domain=controlArea_Domain,
+            periodStart=periodStart,
+            periodEnd=periodEnd
+        )
+
+
+class FinancialExpensesAndIncomeForBalancing(Balancing):
+    """
+    4.6.12. Financial Expenses and Income for Balancing [17.1.I]
+    One year range limit applies
+    Minimum time interval in query response is one month
+    Mandatory parameters
+        DocumentType
+        ControlArea_Domain
+        TimeInterval or combination of PeriodStart and PeriodEnd
+    """
+    def __init__(
+            self,
+            controlArea_Domain: Area = None,
+            periodStart=None,
+            periodEnd=None
+    ):
+        super(FinancialExpensesAndIncomeForBalancing, self).__init__(
+            documentType=DocumentType.A87,
+            controlArea_Domain=controlArea_Domain,
+            periodStart=periodStart,
+            periodEnd=periodEnd
+        )
+        
+
+class CrossborderBalancing(Balancing):
+    """
+    4.6.13. Cross-border Balancing [17.1.J]
+    One year range limit applies
+    Minimum time interval in query response is one BTU period
+    Mandatory parameters
+        DocumentType
+        Acquiring_Domain
+        Connecting_Domain
+        TimeInterval or combination of PeriodStart and PeriodEnd
+    In the query response, the attribute secondaryQuantity contains the Aggregated offers,
+    quantity contains the activated offers and prices are available in the minimum_Price.amount and
+    maximum_Price.amount attributes.
+    """
+    def __init__(
+            self,
+            Acquiring_Domain: Area = None,
+            Connecting_Domain: Area = None,
+            periodStart=None,
+            periodEnd=None
+    ):
+        super(CrossborderBalancing, self).__init__(
+            documentType=DocumentType.A88,
+            Acquiring_Domain=Acquiring_Domain,
+            Connecting_Domain=Connecting_Domain,
+            periodStart=periodStart,
+            periodEnd=periodEnd
+        )
+
+
+class FCRTotalCapacity(Balancing):
+    """
+    4.6.14. FCR Total capacity [SO GL 187.2]
+    One year range limit applies
+    Mandatory parameters
+        DocumentType
+        BusinessType
+        Area_Domain
+        TimeInterval or combination of PeriodStart and PeriodEnd
+    """
+    def __init__(
+            self,
+            businessType: BusinessType = BusinessType.A25,
+            Area_Domain: Area = None,
+            periodStart=None,
+            periodEnd=None
+    ):
+        super(FCRTotalCapacity, self).__init__(
+            documentType=DocumentType.A26,
+            businessType=businessType,
+            Area_Domain=Area_Domain,
+            periodStart=periodStart,
+            periodEnd=periodEnd
+        )
+
+
+class SharesOfFCRCapacity_ShareOfCapacity(Balancing):
+    """
+    4.6.15. Shares of FCR capacity - share of capacity [SO GL 187.2]
+    One year range limit applies
+    Mandatory parameters
+        DocumentType
+        BusinessType
+        Area_Domain
+        TimeInterval or combination of PeriodStart and PeriodEnd
+    """
+    def __init__(
+            self,
+            Area_Domain: Area = None,
+            periodStart=None,
+            periodEnd=None
+    ):
+        super(SharesOfFCRCapacity_ShareOfCapacity, self).__init__(
+            documentType=DocumentType.A26,
+            businessType=BusinessType.C23,
+            Area_Domain=Area_Domain,
+            periodStart=periodStart,
+            periodEnd=periodEnd
+        )
+
+
+class SharesOfFCRCapacity_ContractedReserveCapacity(Balancing):
+    """
+    4.6.16. Shares of FCR capacity - contracted reserve capacity [SO GL 187.2]
+    One year range limit applies
+    Mandatory parameters
+        DocumentType
+        BusinessType
+        Area_Domain
+        TimeInterval or combination of PeriodStart and PeriodEnd
+    """
+    def __init__(
+            self,
+            Area_Domain: Area = None,
+            periodStart=None,
+            periodEnd=None
+    ):
+        super(SharesOfFCRCapacity_ContractedReserveCapacity, self).__init__(
+            documentType=DocumentType.A26,
+            businessType=BusinessType.B95,
+            Area_Domain=Area_Domain,
+            periodStart=periodStart,
+            periodEnd=periodEnd
+        )
+
+
+class FRRActualCapacity(Balancing):
+    """
+    4.6.17. FRR Actual Capacity [SO GL 188.4]
+    Mandatory parameters
+        DocumentType
+        ProcessType
+        BusinessType
+        Area_Domain
+        TimeInterval or combination of PeriodStart and PeriodEnd
+    """
+    def __init__(
+            self,
+            Area_Domain: Area = None,
+            periodStart=None,
+            periodEnd=None
+    ):
+        super(FRRActualCapacity, self).__init__(
+            documentType=DocumentType.A26,
+            processType=ProcessType.A56,
+            businessType=BusinessType.C24,
+            Area_Domain=Area_Domain,
+            periodStart=periodStart,
+            periodEnd=periodEnd
+        )
+
+
+class RRActualCapacity(Balancing):
+    """
+    4.6.18. RR Actual Capacity [SO GL 189.3]
+    Mandatory parameters
+        DocumentType
+        ProcessType
+        BusinessType
+        Area_Domain
+        TimeInterval or combination of PeriodStart and PeriodEnd
+    """
+    def __init__(
+            self,
+            Area_Domain: Area = None,
+            periodStart=None,
+            periodEnd=None
+    ):
+        super(RRActualCapacity, self).__init__(
+            documentType=DocumentType.A26,
+            processType=ProcessType.A46,
+            businessType=BusinessType.C24,
+            Area_Domain=Area_Domain,
+            periodStart=periodStart,
+            periodEnd=periodEnd
+        )
+
+class SharingOfRRAndFRR(Balancing):
+    """
+    4.6.19. Sharing of RR and FRR [SO GL 190.1]
+    One year range limit applies
+    Mandatory parameters
+        DocumentType
+        BusinessType
+        ProcessType
+        Acquiring_Domain
+        Connecting_Domain
+        TimeInterval or combination of PeriodStart and PeriodEnd
+
+    ProcessType can potentially vary (different reserves);
+    ENTSOE Example uses FRR (A56).
+    """
+    def __init__(
+            self,
+            processType: ProcessType = ProcessType.A56,
+            Acquiring_Domain: Area = None,
+            Connecting_Domain: Area = None,
+            periodStart=None,
+            periodEnd=None
+    ):
+        super(RRActualCapacity, self).__init__(
+            documentType=DocumentType.A26,
+            businessType=BusinessType.C22,
+            processType=processType,
+            Acquiring_Domain=Acquiring_Domain,
+            Connecting_Domain=Connecting_Domain,
+            periodStart=periodStart,
+            periodEnd=periodEnd
+        )
+
