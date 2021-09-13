@@ -234,6 +234,44 @@ class AmountOfBalancingReservesUnderContract(Balancing):
         )
 
 
+class PricesOfProcuredBalancingReserves(Balancing):
+    """
+    4.6.6. Prices of Procured Balancing Reserves [17.1.C]
+    Minimum time interval in query response ranges from part of day to year, depending on selected Type_MarketAgreement.Type
+    Mandatory parameters
+        DocumentType
+        Type_MarketAgreement.Type
+        ControlArea_Domain
+        TimeInterval or combination of PeriodStart and PeriodEnd
+    Optional parameters
+        BusinessType
+        PsrType
+        offset (allows downloading more than 100 documents.
+                The offset ∈ [0,4800] so that paging is restricted to query for 4900 documents max.,
+                offset=n returns files in sequence between n+1 and n+100)
+    """
+    def __init__(
+            self,
+            type_MarketAgreementType: MarketAgreementType = MarketAgreementType("Daily"),
+            controlArea_Domain: Area = None,
+            periodStart=None,
+            periodEnd=None,
+            businessType: BusinessType = BusinessType("Frequency containment reserve"),
+            psrType: PsrType = None,
+            offset: int = None
+    ):
+        super(PricesOfProcuredBalancingReserves, self).__init__(
+            documentType=DocumentType.A89,
+            type_MarketAgreementType=type_MarketAgreementType,
+            controlArea_Domain=controlArea_Domain,
+            periodStart=periodStart,
+            periodEnd=periodEnd,
+            businessType=businessType,
+            psrType=psrType,
+            offset=offset
+        )
+
+
 class AcceptedAggregatedOffers(Balancing):
     """
     4.6.7. Accepted Aggregated Offers [17.1.D]
@@ -252,7 +290,7 @@ class AcceptedAggregatedOffers(Balancing):
             controlArea_Domain: Area = None,
             periodStart=None,
             periodEnd=None,
-            businessType: BusinessType = BusinessType.A95,
+            businessType: BusinessType = BusinessType("Frequency containment reserve"),
             psrType: PsrType = None
     ):
         super(AcceptedAggregatedOffers, self).__init__(
@@ -280,14 +318,14 @@ class ActivatedBalancingEnergy(Balancing):
         PsrType
 
     BusinessType can potentially vary (different reserves);
-    ENTSOE Example uses aFRR (A96).
+    ENTSOE Example uses FCR.
     """
     def __init__(
             self,
             controlArea_Domain: Area = None,
             periodStart=None,
             periodEnd=None,
-            businessType: BusinessType = BusinessType.A96,
+            businessType: BusinessType = BusinessType('Frequency containment reserve'),
             psrType: PsrType = None
     ):
         super(ActivatedBalancingEnergy, self).__init__(
@@ -320,7 +358,7 @@ class PricesOfActivatedBalancingEnergy(Balancing):
             controlArea_Domain: Area = None,
             periodStart=None,
             periodEnd=None,
-            businessType: BusinessType = BusinessType.A96,
+            businessType: BusinessType = BusinessType('Frequency containment reserve'),
             psrType: PsrType = None
     ):
         super(PricesOfActivatedBalancingEnergy, self).__init__(
