@@ -75,8 +75,18 @@ class Query:
 
     def __call__(self) -> Dict:
         _ = self.__dict__
-        _ = dict((k, self.get_value_switch(v)) for (k, v) in _.items())
+        _ = dict(
+            (self.property_to_parameter(k), self.get_value_switch(v)) for (k, v) in _.items()
+        )
         return _
+
+    @staticmethod
+    def property_to_parameter(key: str):
+        if key == "type_MarketAgreementType":
+            return "type_MarketAgreement.Type"
+        else:
+            return key
+
 
     @staticmethod
     def get_value_switch(parameter: Any):
