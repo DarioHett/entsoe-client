@@ -3,4 +3,4 @@ from entsoe_client.Queries.Balancing.Balancing import Balancing, CurrentBalancin
     AcceptedAggregatedOffers, ActivatedBalancingEnergy, PricesOfActivatedBalancingEnergy, ImbalancePrices, \
     TotalImbalanceVolumes, FinancialExpensesAndIncomeForBalancing, CrossborderBalancing, FCRTotalCapacity, \
     SharesOfFCRCapacity_ShareOfCapacity, SharesOfFCRCapacity_ContractedReserveCapacity, FRRActualCapacity, \
-    RRActualCapacity
+    RRActualCapacity, PricesOfProcuredBalancingReserves
