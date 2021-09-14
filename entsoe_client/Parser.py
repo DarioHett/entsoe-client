@@ -6,6 +6,9 @@ import pandas as pd
 import entsoe_client.ParserUtils as utils
 from abc import ABC, abstractmethod
 
+from io import BytesIO
+from zipfile import ZipFile
+
 # Maps response_xml resolutions to
 # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Timedelta.html#pandas.Timedelta
 resolution_map: Dict = {
@@ -18,6 +21,25 @@ resolution_map: Dict = {
     'PT15M': '15min',
     'PT1M': '1min'
 }
+
+# TODO: Implement `Parser` class which dynamically chooses Zip or XML.
+
+class ZipParser:
+    @staticmethod
+    def unpack_archive(response_content: bytes) -> List[bytes]:
+        archive = ZipFile(BytesIO(response_content), 'r')
+        xml_document_list = [archive.read(file) for file in archive.infolist()]
+        return xml_document_list
+
+    # May change later to handle `Requests.response` types directly.
+    def parse(self, zip_archive: bytes):
+        # TODO: Now can only handle XML input; reshuffle later to handle other input (e.g. ZIP built from XML).
+        parser = XMLParser()
+        xml_documents = self.unpack_archive(zip_archive)
+        dfs = [parser.parse(xml_document) for xml_document in xml_documents]
+        df = pd.concat(dfs, axis=0)
+        return df
+
 
 class XMLParser:
     @staticmethod
@@ -48,10 +70,12 @@ class ParserFactory:
             else:
                 raise ValueError(type)
         elif tag in ["Balancing_MarketDocument"]:
-            if type in ["A81", "A82", "A83", "A84", "A88", "A89"]:
+            if type in ["A81", "A82", "A83", "A84", "A88", "A89"]: # XML Responses
                 return Balancing_MarketDocument_Parser()
-            elif type in ["A85", "A86", "A87"]:
-                return NotImplementedError("Requires Parsing Zip.")
+            elif type in ["A85", "A86"]: # Zip Responses
+                return Balancing_MarketDocument_Parser()
+            elif type in ["A87"]: # Special "Point" Type.
+                return Balancing_MarketDocument_FinancialExpensesAndIncomeForBalancing_Parser()
             else:
                 raise ValueError(type)
         else:
@@ -123,6 +147,17 @@ class Abstract_Balancing_MarketDocument_Parser(Entsoe_Document_Parser):
         self.MktPSRType_Parser = None
         self.MktGeneratingUnit_Parser = None
 
+    # def File_Parser(self, response_content):
+    #     archive = ZipFile(BytesIO(response_content), 'r')
+    #     Document_list = [archive.read(file).decode() for file in archive.infolist()]
+    #     dataframe_list = [*map(self.Document_Parser, Document_list)]
+    #     df = pd.concat(dataframe_list, axis=0).sort_index()
+    #     return df
+
+
+    def set_File_Parser(self, File_Parser):
+        self.File_Parser = File_Parser
+
     def set_Document_Parser(self, Document_Parser):
         self.Document_Parser = Document_Parser
 
@@ -141,6 +176,16 @@ class Abstract_Balancing_MarketDocument_Parser(Entsoe_Document_Parser):
     def set_MktGeneratingUnit_Parser(self, MktGeneratingUnit_Parser):
         self.MktGeneratingUnit_Parser = MktGeneratingUnit_Parser
 
+# class Zip_Balancing_MarketDocument_Parser(Abstract_Balancing_MarketDocument_Parser):
+#     def __init__(self):
+#         super(Balancing_MarketDocument_Parser, self).__init__()
+#         self.set_Series_Period_Parser(utils.StandardPeriodParser)
+#         self.set_TimeSeries_Parser(utils.Tree_to_DataFrame(self.Series_Period_Parser, 'Period'))
+#         self.set_Document_Parser(utils.Tree_to_DataFrame(self.TimeSeries_Parser, 'TimeSeries'))
+#
+#
+#     def parse(self):
+#         return self.Document_Parser(self.objectified_input_xml)
 
 class Balancing_MarketDocument_Parser(Abstract_Balancing_MarketDocument_Parser):
     def __init__(self):
@@ -153,6 +198,16 @@ class Balancing_MarketDocument_Parser(Abstract_Balancing_MarketDocument_Parser):
     def parse(self):
         return self.Document_Parser(self.objectified_input_xml)
 
+class Balancing_MarketDocument_FinancialExpensesAndIncomeForBalancing_Parser(Abstract_Balancing_MarketDocument_Parser):
+    def __init__(self):
+        super(Balancing_MarketDocument_FinancialExpensesAndIncomeForBalancing_Parser, self).__init__()
+        self.set_Series_Period_Parser(utils.Period_to_DataFrame_fn(utils.get_Period_Financial_Price_data))
+        self.set_TimeSeries_Parser(utils.Tree_to_DataFrame(self.Series_Period_Parser, 'Period'))
+        self.set_Document_Parser(utils.Tree_to_DataFrame(self.TimeSeries_Parser, 'TimeSeries'))
+
+
+    def parse(self):
+        return self.Document_Parser(self.objectified_input_xml)
 
 def parse_bytes(response: requests.Response) -> lxml.objectify.ObjectifiedElement:
     object = lxml.objectify.fromstring(response.content)

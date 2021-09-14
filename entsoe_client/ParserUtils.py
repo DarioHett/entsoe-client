@@ -331,6 +331,33 @@ def get_Period_data(Period: etree._Element) -> List[Dict]:
     data = [dict([(datum.tag, datum.text) for datum in point.iterchildren()]) for point in points]
     return data
 
+
+def get_Period_Financial_Price_data(Period: etree._Element) -> List[Dict]:
+    """
+    TODO: Could be abstracted into `get_Period_data.
+    """
+    points = Period.xpath('./Point', namespaces=Period.nsmap)
+    data = [get_Point_Financial_Price_data(point) for point in points]
+    return data
+
+
+def get_Point_Financial_Price_data(Point: etree._Element) -> Dict:
+    """
+    If a `Point` has overlapping `Financial_Price` field,
+    the standard Procedure does not work.
+
+    Applicable at e.g. FinancialExpensesAndIncomeForBalancing
+    """
+    direction_map = {"A01": "up",
+                     "A02": "down",
+                     "A03": "up_and_down"}
+
+    datum = {Point.position.tag: Point.position.text}
+    for fp in Point.Financial_Price:
+        datum['.'.join([fp.tag, direction_map[fp.direction.text], fp.amount.tag])] = fp.amount.text
+
+    return datum
+
 StandardPeriodParser = Period_to_DataFrame_fn(get_Period_data)
 
 
