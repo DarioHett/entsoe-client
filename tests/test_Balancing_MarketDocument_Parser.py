@@ -1,5 +1,7 @@
 import unittest
-import entsoe_client.Parser as Parser
+
+import entsoe_client.Parsers.Balacing_MarketDocument_Parser
+import entsoe_client.Parsers.Parser as Parser
 import pandas as pd
 import os
 
@@ -30,7 +32,8 @@ class test_Balancing_MarketDocument_Parser(unittest.TestCase):
         for i in range(len(types)):
             with self.subTest(i=i):
                 parser = Parser.ParserFactory.get_parser("Balancing_MarketDocument", types[i])
-                self.assertIsInstance(parser, Parser.Balancing_MarketDocument_Parser)
+                self.assertIsInstance(parser,
+                                      entsoe_client.Parsers.Balacing_MarketDocument_Parser.Balancing_MarketDocument_Parser)
 
 
     def test_parse_basic(self):

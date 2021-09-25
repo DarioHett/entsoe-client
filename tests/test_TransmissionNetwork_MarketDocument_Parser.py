@@ -1,7 +1,9 @@
 import unittest
-import entsoe_client.Parser as Parser
+import entsoe_client.Parsers.Parser as Parser
 import pandas as pd
 import os
+
+import entsoe_client.Parsers.TransmissionNetwork_MarketDocument_Parser
 
 
 class test_TransmissionNetwork_MarketDocument_Parser(unittest.TestCase):
@@ -30,7 +32,8 @@ class test_TransmissionNetwork_MarketDocument_Parser(unittest.TestCase):
         for i in range(len(types)):
             with self.subTest(i=i):
                 parser = Parser.ParserFactory.get_parser("TransmissionNetwork_MarketDocument", types[i])
-                self.assertIsInstance(parser, Parser.TransmissionNetwork_MarketDocument_Parser)
+                self.assertIsInstance(parser,
+                                      entsoe_client.Parsers.TransmissionNetwork_MarketDocument_Parser.TransmissionNetwork_MarketDocument_Parser)
 
 
     def test_parse_basic(self):
