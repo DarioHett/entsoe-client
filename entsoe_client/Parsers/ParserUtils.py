@@ -22,148 +22,6 @@ import requests
 from lxml import etree
 
 
-def compose(*functions: List[Callable[[Any], Any]]) -> Callable[[Any], Any]:
-    return functools.reduce(lambda f, g: lambda x: f(g(x)), functions, lambda x: x)
-
-
-def validate_timedeltas(filetype_parser: Callable[[requests.Response], pd.DataFrame]
-                        ) -> Callable[[requests.Response], pd.DataFrame]:
-    """
-    TODO: Expand the logging to a validation functionality.
-    """
-
-    def parser_wrapper(response):
-        df = filetype_parser(response)
-        unique_timedeltas = df.index.to_series().diff().value_counts()
-        log_msg = f"Unique pd.Timedelta counts:\n{unique_timedeltas}"
-        if (unique_timedeltas.size > 1) and \
-                ((unique_timedeltas.size == 2) and (unique_timedeltas.index.min() != pd.Timedelta(0))):
-            logging.warning(log_msg)
-            # raise IndexError
-        else:
-            logging.debug(log_msg)
-        return df
-
-    return parser_wrapper
-
-
-@validate_timedeltas
-def parse_zip(response: requests.Response) -> pd.DataFrame:
-    archive = ZipFile(BytesIO(response.content), 'r')
-    response_text_list = [archive.read(file).decode() for file in archive.infolist()]
-    Period_to_DataFrame = Period_to_DataFrame_fn(get_Period_data)
-    TimeSeries_to_DataFrame = TimeSeries_to_DataFrame_fn(Period_to_DataFrame)
-    Response_to_DataFrame = Response_to_DataFrame_fn(TimeSeries_to_DataFrame)
-    dataframe_list = [*map(Response_to_DataFrame, response_text_list)]
-    df = pd.concat(dataframe_list, axis=0).sort_index()
-    return df
-
-
-@validate_timedeltas
-def parse_text_xml(response: requests.Response) -> pd.DataFrame:
-    response_text = response.text
-    Period_to_DataFrame = Period_to_DataFrame_fn(get_Period_data)
-    TimeSeries_to_DataFrame = TimeSeries_to_DataFrame_fn(Period_to_DataFrame)
-    Response_to_DataFrame = Response_to_DataFrame_fn(TimeSeries_to_DataFrame)
-    df = Response_to_DataFrame(response_text)
-    return df
-
-
-def parse_text_xml2(response: requests.Response) -> pd.DataFrame:
-    response_text = response.text
-    response_xml = drop_xml_encoding_line(response_text)
-    root = etree.fromstring(response_xml)
-    Point_to_DataFrame = Tree_to_DataFrame_fn(pd.json_normalize, None)
-    Period_to_DataFrame = Tree_to_DataFrame_fn(Point_to_DataFrame, 'Point')
-    TimeSeries_to_DataFrame = Tree_to_DataFrame_fn(Period_to_DataFrame, 'Period')
-    Response_to_DataFrame = Tree_to_DataFrame_fn(TimeSeries_to_DataFrame, 'TimeSeries')
-    df = Response_to_DataFrame(root)
-    return df
-
-
-
-def parse_outages(response: requests.Response) -> pd.DataFrame:
-    """
-    Outages responses do not contain `Periods` under the TimeSeries node.
-    A `TimeSeries` node has to be unfolded and normalized to a single row.
-    Further, they come as ZipFiles.
-    """
-    archive = ZipFile(BytesIO(response.content), 'r')
-    response_text_list = [archive.read(file).decode() for file in archive.infolist()]
-    TimeSeries_to_DataFrame = lambda TimeSeries: pd.json_normalize(dict([unfold_node(TimeSeries)]))
-    Response_to_DataFrame = Response_to_DataFrame_fn(TimeSeries_to_DataFrame)
-    dataframe_list = [*map(Response_to_DataFrame, response_text_list)]
-    df = pd.concat(dataframe_list, axis=0).sort_index()
-    return df
-
-
-def parse_masterdata(response: requests.Response) -> pd.DataFrame:
-    """
-    MasterData responses do not contain `Periods` under the TimeSeries node.
-    A `TimeSeries` node has to be unfolded and normalized to a single row.
-    """
-    response_text = response.text
-    TimeSeries_to_DataFrame = lambda TimeSeries: pd.json_normalize(dict([unfold_node(TimeSeries)]))
-    Response_to_DataFrame = Response_to_DataFrame_fn(TimeSeries_to_DataFrame)
-    df = Response_to_DataFrame(response_text)
-    return df
-
-
-def parse_flowbasedparameters(response: requests.Response) -> pd.DataFrame:
-    """
-    Mostly custom functions for extraction below the `TimeSeries` level due to specific structure.
-    TODO: Local functions do not pollute global nameSpace.
-    """
-    response_text = response.text
-
-    def get_Constraint_TimeSeries_data(Constraint_TimeSeries: etree._Element) -> pd.DataFrame:
-        ptdfs = Constraint_TimeSeries.findall('.//PTDF_Domain', Constraint_TimeSeries.nsmap)
-        data = [dict((item.tag.partition('}')[2], item.text) for item in point) for point in ptdfs]
-        df = pd.DataFrame(data)
-        regres = Constraint_TimeSeries.findall('.//Monitored_RegisteredResource', Constraint_TimeSeries.nsmap)
-        [res.remove(ptdf) for ptdf in ptdfs for res in regres]
-        regres_data = [dict((item.tag.partition('}')[2], item.text) for item in point) for point in regres]
-        regres_df = pd.DataFrame(regres_data)
-        regres_df.columns = df.columns
-        df = df.append(regres_df)
-        df = pd.DataFrame(data=df['pTDF_Quantity.quantity'].values, index=df.mRID.values).T
-        [Constraint_TimeSeries.remove(res) for res in regres]
-        df = df.assign(**unfold_node(Constraint_TimeSeries)[1])
-        return df
-
-    def get_Point_data(Point: etree._Element) -> pd.DataFrame:
-        constraint_timeseries = Point.findall('.//Constraint_TimeSeries', Point.nsmap)
-        data = [get_Constraint_TimeSeries_data(cts) for cts in constraint_timeseries]
-        df = pd.concat(data)
-        [Point.remove(cts) for cts in constraint_timeseries]
-        df = df.assign(**unfold_node(Point)[1])
-        return df
-
-    def get_Period_data(Period: etree._Element) -> List[pd.DataFrame]:
-        points = Period.findall('.//Point', Period.nsmap)
-        data = [get_Point_data(point) for point in points]
-        return data
-
-    def Period_to_DataFrame(Period: etree._Element) -> pd.DataFrame:
-        """
-        Specific to FlowbasedParameters.
-        """
-        index = get_Period_index(Period)
-        df_list = get_Period_data(Period)
-        df_list = [subdf.eval("index=@ix").set_index('index') for subdf, ix in zip(df_list, index)]
-        df = pd.concat(df_list, axis=0)
-        return df
-
-    TimeSeries_to_DataFrame = TimeSeries_to_DataFrame_fn(Period_to_DataFrame)
-    Response_to_DataFrame = Response_to_DataFrame_fn(TimeSeries_to_DataFrame)
-    df = Response_to_DataFrame(response_text)
-    return df
-
-
-def drop_xml_encoding_line(xml_text: str) -> str:
-    return "\n".join(xml_text.split('\n')[1:])
-
-
 def unfold_node(node: etree._Element) -> tuple[str, dict[str, dict[str,]]]:
     """
     Recursive unfolding of a node into a dict.
@@ -171,8 +29,8 @@ def unfold_node(node: etree._Element) -> tuple[str, dict[str, dict[str,]]]:
     """
     tag: str = node.tag
     children: etree._Element = node.getchildren()
-    if children == []:
-        return (tag, node.text)
+    if not children:
+        return tag, node.text
     else:
         return tag, dict([unfold_node(child) for child in children])
 
@@ -193,32 +51,8 @@ def decompose_node(node: etree._Element, subnode_tag) -> tuple[dict, list]:
         # Handle multiple subnode types.
         raise NotImplementedError
 
-def standard_parsing(root: etree._Element):
-    metadata_0, subnodes_0 = decompose_node(root, 'TimeSeries')
-    metadata_1, subnodes_1 = decompose_node(subnodes_0[0], 'Period')
-    metadata_2, subnodes_2 = decompose_node(subnodes_1[0], 'Point')
-    data = decompose_node(subnodes_2[0], None)
-    pd.json_normalize(data)
 
-
-def traverse_tree(root: etree._Element, subnodes_tags: List[str]) -> List[Tuple[List[etree._Element],Dict[str, str]]]:
-    """
-    Recurvisely apply `decompose_node` with different tags for subnodes.
-    Returns [metadata,
-                [[metadata, [subnodes]],
-                 [metadata, [subnodes]],
-                  ...
-                ]
-             ]
-    """
-    if len(subnodes_tags) == 1:
-        metadata, subnodes = decompose_node(root, subnodes_tags[0])
-        return metadata, subnodes
-    else:
-        metadata, subnodes = decompose_node(root, subnodes_tags[0])
-        return metadata, [traverse_tree(node, subnodes_tags[1:]) for node in subnodes]
-
-def Tree_to_DataFrame_fn(Subtree_to_DataFrame: Callable, Subtree_Tag: str) -> Callable[[str], pd.DataFrame]:
+def Tree_to_DataFrame_fn(Subtree_to_DataFrame: Callable, Subtree_Tag: str) -> Callable[[etree._Element], pd.DataFrame]:
     def Tree_to_DataFrame(root: etree._Element) -> pd.DataFrame:
         """
         """
@@ -358,17 +192,5 @@ def get_Point_Financial_Price_data(Point: etree._Element) -> Dict:
 
     return datum
 
+
 StandardPeriodParser = Period_to_DataFrame_fn(get_Period_data)
-
-
-parse_standard_format_response = compose(Response_to_DataFrame_fn,
-                                          TimeSeries_to_DataFrame_fn,
-                                          Period_to_DataFrame_fn,
-                                          get_Period_data)
-
-parse_standard_format_response = compose(
-    get_Period_data,
-    Period_to_DataFrame_fn,
-    TimeSeries_to_DataFrame_fn,
-    Response_to_DataFrame_fn
-)

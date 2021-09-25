@@ -4,13 +4,13 @@ from entsoe_client.Parsers.Entsoe_Document_Parser import Entsoe_Document_Parser
 
 class Abstract_Balancing_MarketDocument_Parser(Entsoe_Document_Parser):
     def __init__(self):
+        super().__init__()
         self.Document_Parser = None
         self.TimeSeries_Parser = None
         self.Series_Period_Parser = None
         self.Point_Parser = None
         self.MktPSRType_Parser = None
         self.MktGeneratingUnit_Parser = None
-
 
     def set_Document_Parser(self, Document_Parser):
         self.Document_Parser = Document_Parser
@@ -38,7 +38,6 @@ class Balancing_MarketDocument_Parser(Abstract_Balancing_MarketDocument_Parser):
         self.set_TimeSeries_Parser(utils.Tree_to_DataFrame(self.Series_Period_Parser, 'Period'))
         self.set_Document_Parser(utils.Tree_to_DataFrame(self.TimeSeries_Parser, 'TimeSeries'))
 
-
     def parse(self):
         return self.Document_Parser(self.objectified_input_xml)
 
@@ -49,7 +48,6 @@ class Balancing_MarketDocument_FinancialExpensesAndIncomeForBalancing_Parser(Abs
         self.set_Series_Period_Parser(utils.Period_to_DataFrame_fn(utils.get_Period_Financial_Price_data))
         self.set_TimeSeries_Parser(utils.Tree_to_DataFrame(self.Series_Period_Parser, 'Period'))
         self.set_Document_Parser(utils.Tree_to_DataFrame(self.TimeSeries_Parser, 'TimeSeries'))
-
 
     def parse(self):
         return self.Document_Parser(self.objectified_input_xml)

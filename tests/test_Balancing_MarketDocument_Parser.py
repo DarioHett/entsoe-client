@@ -1,7 +1,7 @@
 import unittest
 
 import entsoe_client.Parsers.Balacing_MarketDocument_Parser
-import entsoe_client.Parsers.Parser as Parser
+from entsoe_client.Parsers import Parser, ZipParser, XMLParser, ParserFactory
 import pandas as pd
 import os
 
@@ -31,14 +31,14 @@ class test_Balancing_MarketDocument_Parser(unittest.TestCase):
         types = ["A81"]
         for i in range(len(types)):
             with self.subTest(i=i):
-                parser = Parser.ParserFactory.get_parser("Balancing_MarketDocument", types[i])
+                parser = ParserFactory.get_parser("Balancing_MarketDocument", types[i])
                 self.assertIsInstance(parser,
                                       entsoe_client.Parsers.Balacing_MarketDocument_Parser.Balancing_MarketDocument_Parser)
 
 
     def test_parse_basic(self):
         """Basic AmountOfBalancingReservesUnderContract Query."""
-        parser = Parser.XMLParser()
+        parser = XMLParser()
         keys = list(self.response_contents.keys())
         values = list(self.response_contents.values())
         df = parser.parse(values[0])
@@ -48,9 +48,9 @@ class test_Balancing_MarketDocument_Parser(unittest.TestCase):
     def test_parse_all(self):
         for file,content in self.response_contents.items():
             if file[-3:] == 'zip':
-                parser = Parser.ZipParser()
+                parser = ZipParser()
             elif file[-3:] == 'xml':
-                parser = Parser.XMLParser()
+                parser = XMLParser()
             else:
                 raise TypeError
             df = parser.parse(content)
