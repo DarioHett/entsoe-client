@@ -1,5 +1,5 @@
 import unittest
-import entsoe_client.Parsers.Parser as Parser
+from entsoe_client.Parsers import XMLParser, ParserFactory
 import pandas as pd
 import os
 
@@ -31,14 +31,14 @@ class test_Publication_MarketDocument_Parser(unittest.TestCase):
         types = ["A61"]
         for i in range(len(types)):
             with self.subTest(i=i):
-                parser = Parser.ParserFactory.get_parser("Publication_MarketDocument", types[i])
+                parser = ParserFactory.get_parser("Publication_MarketDocument", types[i])
                 self.assertIsInstance(parser,
                                       entsoe_client.Parsers.Publication_MarketDocument_Parser.Publication_MarketDocument_Parser)
 
 
     def test_parse_basic(self):
         """Basic Query."""
-        parser = Parser.XMLParser()
+        parser = XMLParser()
         keys = list(self.response_contents.keys())
         values = list(self.response_contents.values())
         df = parser.parse(values[0])
@@ -47,7 +47,7 @@ class test_Publication_MarketDocument_Parser(unittest.TestCase):
 
     def test_parse_all(self):
         for file,content in self.response_contents.items():
-            parser = Parser.XMLParser()
+            parser = XMLParser()
             df = parser.parse(content)
             self.assertIsInstance(df, pd.DataFrame)
 

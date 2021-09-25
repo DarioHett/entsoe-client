@@ -1,7 +1,7 @@
 import unittest
 
 import entsoe_client.Parsers.GL_MarketDocument_Parser
-import entsoe_client.Parsers.Parser as Parser
+from entsoe_client.Parsers import Parser, XMLParser, ZipParser, ParserFactory
 import pandas as pd
 import os
 
@@ -29,19 +29,19 @@ class test_GL_MarketDocument_Parser(unittest.TestCase):
         types = ["A65", "A70", "A71", "A72", "A73", "A68", "A69", "A74", "A75"]
         for i in range(len(types)):
             with self.subTest(i=i):
-                parser = Parser.ParserFactory.get_parser("GL_MarketDocument", types[i])
+                parser = ParserFactory.get_parser("GL_MarketDocument", types[i])
                 self.assertIsInstance(parser, entsoe_client.Parsers.GL_MarketDocument_Parser.GL_MarketDocument_Parser)
 
 
     def test_parse_basic(self):
         """Basic ActualTotalLoad Query."""
-        parser = Parser.XMLParser()
+        parser = XMLParser()
         df = parser.parse(self.response_contents[1])
         self.assertIsInstance(df, pd.DataFrame)
 
 
     def test_parse_all(self):
-        parser = Parser.XMLParser()
+        parser = XMLParser()
         for response_content in self.response_contents:
             df = parser.parse(response_content)
             self.assertIsInstance(df, pd.DataFrame)

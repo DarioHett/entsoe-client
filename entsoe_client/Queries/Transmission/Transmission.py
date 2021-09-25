@@ -485,7 +485,7 @@ class ImplicitAuctionCongestionIncome(Transmission):
 
 class CommercialSchedules(Transmission):
     """
-    (Custom class; leaving contract type unspecified w/o invoking a superclass.)
+    (Custom class; leaving contract document_type unspecified w/o invoking a superclass.)
     4.2.13.1 Commercial Schedules
     One year range limit applies
     Minimum time interval in query response_xml is one day

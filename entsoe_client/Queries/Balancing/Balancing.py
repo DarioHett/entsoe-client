@@ -1,7 +1,6 @@
-from entsoe_client.Queries import Query
 from entsoe_client.ParameterTypes import *
-from typing import Dict, Union, Optional
-import pandas as pd
+from entsoe_client.Queries import Query
+
 
 class Balancing(Query):
     """
@@ -618,15 +617,9 @@ class SharingOfRRAndFRR(Balancing):
     ProcessType can potentially vary (different reserves);
     ENTSOE Example uses FRR (A56).
     """
-    def __init__(
-            self,
-            processType: ProcessType = ProcessType.A56,
-            Acquiring_Domain: Area = None,
-            Connecting_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None
-    ):
-        super(RRActualCapacity, self).__init__(
+    def __init__(self, processType: ProcessType = ProcessType.A56, Acquiring_Domain: Area = None,
+                 Connecting_Domain: Area = None, periodStart=None, periodEnd=None):
+        super(SharingOfRRAndFRR, self).__init__(
             documentType=DocumentType.A26,
             businessType=BusinessType.C22,
             processType=processType,
@@ -635,4 +628,5 @@ class SharingOfRRAndFRR(Balancing):
             periodStart=periodStart,
             periodEnd=periodEnd
         )
+        super().__init__(processType, Acquiring_Domain, Connecting_Domain, periodStart, periodEnd)
 

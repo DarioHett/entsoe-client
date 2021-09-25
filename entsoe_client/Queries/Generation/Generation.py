@@ -10,8 +10,8 @@ class Generation(Query):
     4.4. Generation domain
     For most of the data items in the generation domain,
     the PsrType parameter is optional. When this parameter is not used,
-    API returns all available data for each production type for the queried interval and area.
-    If the parameter is used, data will be returned only for the specific production type requested.
+    API returns all available data for each production document_type for the queried interval and area.
+    If the parameter is used, data will be returned only for the specific production document_type requested.
     """
 
     def __init__(self,
@@ -65,7 +65,7 @@ class InstalledGenerationCapacityAggregated(Generation):
         In_Domain
         TimeInterval or combination of PeriodStart and PeriodEnd
     Optional parameters
-        PsrType (When used, only queried production type is returned)
+        PsrType (When used, only queried production document_type is returned)
     """
 
     def __init__(self,
@@ -96,7 +96,7 @@ class InstalledGenerationCapacityPerUnit(Generation):
         In_Domain
         TimeInterval or combination of PeriodStart and PeriodEnd
     Optional parameters
-        PsrType (When used, only queried production type is returned)
+        PsrType (When used, only queried production document_type is returned)
     """
 
     def __init__(self,
@@ -155,7 +155,7 @@ class DayAheadGenerationForecastsWindSolar(Generation):
             In_Domain
             TimeInterval or combination of PeriodStart and PeriodEnd
         Optional parameters
-            PsrType (When used, only queried production type is returned)
+            PsrType (When used, only queried production document_type is returned)
     """
 
     def __init__(self,
@@ -185,7 +185,7 @@ class CurrentGenerationForecastsWindSolar(Generation):
         In_Domain
         TimeInterval or combination of PeriodStart and PeriodEnd
     Optional parameters
-        PsrType (When used, only queried production type is returned)
+        PsrType (When used, only queried production document_type is returned)
     """
 
     def __init__(self,
@@ -215,7 +215,7 @@ class IntradayGenerationForecastsWindSolar(Generation):
         In_Domain
         TimeInterval or combination of PeriodStart and PeriodEnd
     Optional parameters
-        PsrType (When used, only queried production type is returned)
+        PsrType (When used, only queried production document_type is returned)
     """
 
     def __init__(self,
@@ -245,7 +245,7 @@ class ActualGenerationOutputPerGenerationUnit(Generation):
         In_Domain (can only be queried for Control Area EIC Code)
         TimeInterval or combination of PeriodStart and PeriodEnd
     Optional parameters
-        PsrType (When used, only queried production type is returned)
+        PsrType (When used, only queried production document_type is returned)
         RegisteredResource (EIC of Generation Unit)
     """
 
@@ -279,7 +279,7 @@ class AggregatedGenerationPerType(Generation):
         In_Domain
         TimeInterval or combination of PeriodStart and PeriodEnd
     Optional parameters
-         PsrType (When used, only queried production type is returned)
+         PsrType (When used, only queried production document_type is returned)
     Please note the followings:
     Response from API is same irrespective of querying for Document Types A74 - Wind & Solar;
     A75 - Actual  Generation Per Type.
