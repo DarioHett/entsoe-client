@@ -84,6 +84,8 @@ class Query:
     def property_to_parameter(key: str):
         if key == "type_MarketAgreementType":
             return "type_MarketAgreement.Type"
+        elif key == "contract_MarketAgreementType":
+            return "contract_MarketAgreement.Type"
         else:
             return key
 

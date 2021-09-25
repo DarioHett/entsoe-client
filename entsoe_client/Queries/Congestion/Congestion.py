@@ -42,8 +42,8 @@ class Redispatching(Congestion):
     def __init__(self,
                  in_Domain: Area,
                  out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp],
-                 periodEnd: Union[str, pd.Timestamp]):
+                 periodStart: Union[int, str, pd.Timestamp],
+                 periodEnd: Union[int, str, pd.Timestamp]):
         super(Redispatching, self).__init__(
             documentType=DocumentType.A63,
             businessType=BusinessType.A46,
@@ -68,10 +68,10 @@ class Countertrading(Congestion):
     def __init__(self,
                  in_Domain: Area,
                  out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp],
-                 periodEnd: Union[str, pd.Timestamp]):
+                 periodStart: Union[int, str, pd.Timestamp],
+                 periodEnd: Union[int, str, pd.Timestamp]):
         super(Countertrading, self).__init__(
-            documentType=DocumentType.A91,
+            documentType=DocumentType('Counter trade notice'),
             in_Domain = in_Domain,
             out_Domain = out_Domain,
             periodStart=periodStart,
@@ -95,13 +95,12 @@ class CostsOfCongestionManagement(Congestion):
 
     def __init__(self,
                  in_Domain: Area,
-                 out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp],
-                 periodEnd: Union[str, pd.Timestamp]):
+                 periodStart: Union[int, str, pd.Timestamp],
+                 periodEnd: Union[int, str, pd.Timestamp]):
         super(CostsOfCongestionManagement, self).__init__(
             documentType=DocumentType.A92,
             businessType=BusinessType.B03,
             in_Domain=in_Domain,
-            out_Domain=out_Domain,
+            out_Domain=in_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd)

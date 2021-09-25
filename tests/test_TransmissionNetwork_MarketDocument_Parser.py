@@ -4,13 +4,13 @@ import pandas as pd
 import os
 
 
-class test_Balancing_MarketDocument_Parser(unittest.TestCase):
+class test_TransmissionNetwork_MarketDocument_Parser(unittest.TestCase):
 
 
     @classmethod
     def setUpClass(cls) -> None:
         cls.response_contents: dict = {}
-        path = "./tests/data/Balancing_MarketDocument/"
+        path = "./tests/data/TransmissionNetwork_MarketDocument/"
         for file in os.listdir(path):
             with open(path+file, "rb") as data:
                 cls.response_contents[file] = data.read()
@@ -26,11 +26,11 @@ class test_Balancing_MarketDocument_Parser(unittest.TestCase):
 
 
     def test_factory_choice(self):
-        types = ["A81"]
+        types = ["A90"]
         for i in range(len(types)):
             with self.subTest(i=i):
-                parser = Parser.ParserFactory.get_parser("Balancing_MarketDocument", types[i])
-                self.assertIsInstance(parser, Parser.Balancing_MarketDocument_Parser)
+                parser = Parser.ParserFactory.get_parser("TransmissionNetwork_MarketDocument", types[i])
+                self.assertIsInstance(parser, Parser.TransmissionNetwork_MarketDocument_Parser)
 
 
     def test_parse_basic(self):
@@ -44,12 +44,7 @@ class test_Balancing_MarketDocument_Parser(unittest.TestCase):
 
     def test_parse_all(self):
         for file,content in self.response_contents.items():
-            if file[-3:] == 'zip':
-                parser = Parser.ZipParser()
-            elif file[-3:] == 'xml':
-                parser = Parser.XMLParser()
-            else:
-                raise TypeError
+            parser = Parser.XMLParser()
             df = parser.parse(content)
             self.assertIsInstance(df, pd.DataFrame)
 

@@ -24,6 +24,20 @@ resolution_map: Dict = {
 
 # TODO: Implement `Parser` class which dynamically chooses Zip or XML.
 
+class Parser:
+    @staticmethod
+    def parse(response: requests.Response):
+        response_type = response.headers['Content-Type']
+        content = response.content
+        if response_type == 'text/xml':
+            parser = XMLParser()
+        elif response_type == 'application/zip':
+            parser = ZipParser()
+        else:
+            raise NotImplementedError
+        df = parser.parse(content)
+        return df
+
 class ZipParser:
     @staticmethod
     def unpack_archive(response_content: bytes) -> List[bytes]:
@@ -67,6 +81,16 @@ class ParserFactory:
                 return GL_MarketDocument_Parser()
             elif type in ["A71", "A72", "A73", "A68", "A69", "A74", "A75"]: # Generation
                 return GL_MarketDocument_Parser()
+            else:
+                raise ValueError(type)
+        elif tag in ["TransmissionNetwork_MarketDocument"]:
+            if type in ["A90", "A63", "A91", "A92"]:
+                return TransmissionNetwork_MarketDocument_Parser()
+            else:
+                raise ValueError(type)
+        elif tag in ["Publication_MarketDocument"]:
+            if type in ["A61", "A31", "A93", "A25", "A26", "A44", "A09", "A11", "A94"]:
+                return Publication_MarketDocument_Parser()
             else:
                 raise ValueError(type)
         elif tag in ["Balancing_MarketDocument"]:
@@ -138,7 +162,7 @@ class GL_MarketDocument_Parser(Abstract_GL_MarketDocument_Parser):
         return self.Document_Parser(self.objectified_input_xml)
 
 
-class Abstract_Balancing_MarketDocument_Parser(Entsoe_Document_Parser):
+class Abstract_Publication_MarketDocument_Parser(Entsoe_Document_Parser):
     def __init__(self):
         self.Document_Parser = None
         self.TimeSeries_Parser = None
@@ -146,17 +170,6 @@ class Abstract_Balancing_MarketDocument_Parser(Entsoe_Document_Parser):
         self.Point_Parser = None
         self.MktPSRType_Parser = None
         self.MktGeneratingUnit_Parser = None
-
-    # def File_Parser(self, response_content):
-    #     archive = ZipFile(BytesIO(response_content), 'r')
-    #     Document_list = [archive.read(file).decode() for file in archive.infolist()]
-    #     dataframe_list = [*map(self.Document_Parser, Document_list)]
-    #     df = pd.concat(dataframe_list, axis=0).sort_index()
-    #     return df
-
-
-    def set_File_Parser(self, File_Parser):
-        self.File_Parser = File_Parser
 
     def set_Document_Parser(self, Document_Parser):
         self.Document_Parser = Document_Parser
@@ -176,16 +189,85 @@ class Abstract_Balancing_MarketDocument_Parser(Entsoe_Document_Parser):
     def set_MktGeneratingUnit_Parser(self, MktGeneratingUnit_Parser):
         self.MktGeneratingUnit_Parser = MktGeneratingUnit_Parser
 
-# class Zip_Balancing_MarketDocument_Parser(Abstract_Balancing_MarketDocument_Parser):
-#     def __init__(self):
-#         super(Balancing_MarketDocument_Parser, self).__init__()
-#         self.set_Series_Period_Parser(utils.StandardPeriodParser)
-#         self.set_TimeSeries_Parser(utils.Tree_to_DataFrame(self.Series_Period_Parser, 'Period'))
-#         self.set_Document_Parser(utils.Tree_to_DataFrame(self.TimeSeries_Parser, 'TimeSeries'))
-#
-#
-#     def parse(self):
-#         return self.Document_Parser(self.objectified_input_xml)
+
+class Publication_MarketDocument_Parser(Abstract_Publication_MarketDocument_Parser):
+    def __init__(self):
+        super(Publication_MarketDocument_Parser, self).__init__()
+        self.set_Series_Period_Parser(utils.StandardPeriodParser)
+        self.set_TimeSeries_Parser(utils.Tree_to_DataFrame(self.Series_Period_Parser, 'Period'))
+        self.set_Document_Parser(utils.Tree_to_DataFrame(self.TimeSeries_Parser, 'TimeSeries'))
+
+    def parse(self):
+        return self.Document_Parser(self.objectified_input_xml)
+
+
+class Abstract_TransmissionNetwork_MarketDocument_Parser(Entsoe_Document_Parser):
+    def __init__(self):
+        self.Document_Parser = None
+        self.TimeSeries_Parser = None
+        self.Series_Period_Parser = None
+        self.Point_Parser = None
+        self.MktPSRType_Parser = None
+        self.MktGeneratingUnit_Parser = None
+
+    def set_Document_Parser(self, Document_Parser):
+        self.Document_Parser = Document_Parser
+
+    def set_TimeSeries_Parser(self, TimeSeries_Parser):
+        self.TimeSeries_Parser = TimeSeries_Parser
+
+    def set_Series_Period_Parser(self, Series_Period_Parser):
+        self.Series_Period_Parser = Series_Period_Parser
+
+    def set_Point_Parser(self, Point_Parser):
+        self.Point_Parser = Point_Parser
+
+    def set_MktPSRType_Parser(self, MktPSRType_Parser):
+        self.MktPSRType_Parser = MktPSRType_Parser
+
+    def set_MktGeneratingUnit_Parser(self, MktGeneratingUnit_Parser):
+        self.MktGeneratingUnit_Parser = MktGeneratingUnit_Parser
+
+
+class TransmissionNetwork_MarketDocument_Parser(Abstract_TransmissionNetwork_MarketDocument_Parser):
+    def __init__(self):
+        super(TransmissionNetwork_MarketDocument_Parser, self).__init__()
+        self.set_Series_Period_Parser(utils.StandardPeriodParser)
+        self.set_TimeSeries_Parser(utils.Tree_to_DataFrame(self.Series_Period_Parser, 'Period'))
+        self.set_Document_Parser(utils.Tree_to_DataFrame(self.TimeSeries_Parser, 'TimeSeries'))
+
+
+    def parse(self):
+        return self.Document_Parser(self.objectified_input_xml)
+
+class Abstract_Balancing_MarketDocument_Parser(Entsoe_Document_Parser):
+    def __init__(self):
+        self.Document_Parser = None
+        self.TimeSeries_Parser = None
+        self.Series_Period_Parser = None
+        self.Point_Parser = None
+        self.MktPSRType_Parser = None
+        self.MktGeneratingUnit_Parser = None
+
+
+    def set_Document_Parser(self, Document_Parser):
+        self.Document_Parser = Document_Parser
+
+    def set_TimeSeries_Parser(self, TimeSeries_Parser):
+        self.TimeSeries_Parser = TimeSeries_Parser
+
+    def set_Series_Period_Parser(self, Series_Period_Parser):
+        self.Series_Period_Parser = Series_Period_Parser
+
+    def set_Point_Parser(self, Point_Parser):
+        self.Point_Parser = Point_Parser
+
+    def set_MktPSRType_Parser(self, MktPSRType_Parser):
+        self.MktPSRType_Parser = MktPSRType_Parser
+
+    def set_MktGeneratingUnit_Parser(self, MktGeneratingUnit_Parser):
+        self.MktGeneratingUnit_Parser = MktGeneratingUnit_Parser
+
 
 class Balancing_MarketDocument_Parser(Abstract_Balancing_MarketDocument_Parser):
     def __init__(self):
