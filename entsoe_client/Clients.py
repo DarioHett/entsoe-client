@@ -13,7 +13,7 @@ retry_count = 1
 class Client:
     # noinspection LongLine
     """
-    Basic GET Request interface to ENTSO-E API.
+    Basic GET Request interface to ENTSOE API.
     Requires an API Key for access.
 
     `_request` parses a Dict for the API call.
@@ -47,14 +47,15 @@ class Client:
 
         return response
 
-    def _validate_response(self, response: requests.Response) -> requests.Response:
+    @staticmethod
+    def _validate_response(response: requests.Response) -> requests.Response:
         try:
             response.raise_for_status()
-        except requests.exceptions.HTTPError as e:
-            response_xml = "\n".join(response.text.split("\n")[1:]) # Drop encoding <?...?>
+        except requests.exceptions.HTTPError:
+            response_xml = "\n".join(response.text.split("\n")[1:])  # Drop encoding <?...?>
             response_etree = etree.fromstring(response_xml)
             reason = response_etree.find(".//Reason/text", response_etree.nsmap)
-            logging.debug("Response Reason: "+reason.text)
+            logging.debug("Response Reason: " + reason.text)
             return response
         else:
             return response

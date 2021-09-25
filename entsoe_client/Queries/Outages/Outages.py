@@ -1,7 +1,6 @@
-from entsoe_client.Queries import Query
 from entsoe_client.ParameterTypes import *
-from typing import Dict, Union, Optional
-import pandas as pd
+from entsoe_client.Queries import Query
+
 
 class Outages(Query):
     """

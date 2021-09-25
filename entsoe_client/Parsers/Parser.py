@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List
 
 from lxml import etree, objectify
 import requests
@@ -14,20 +14,6 @@ from entsoe_client.Parsers.Publication_MarketDocument_Parser import Publication_
 from entsoe_client.Parsers.TransmissionNetwork_MarketDocument_Parser import \
     TransmissionNetwork_MarketDocument_Parser
 
-# Maps response_xml resolutions to
-# https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Timedelta.html#pandas.Timedelta
-resolution_map: Dict = {
-    'P1Y': '12M',
-    'P1M': '1M',
-    'P7D': '7D',
-    'P1D': '1D',
-    'PT60M': '60min',
-    'PT30M': '30min',
-    'PT15M': '15min',
-    'PT1M': '1min'
-}
-
-# TODO: Implement `Parser` class which dynamically chooses Zip or XML.
 
 class Parser:
     @staticmethod
@@ -81,33 +67,33 @@ class XMLParser:
 
 class ParserFactory:
     @staticmethod
-    def get_parser(tag: str, type: str):
+    def get_parser(tag: str, document_type: str):
         if tag in ["GL_MarketDocument"]:
-            if type in ["A65", "A70"]: # Load
+            if document_type in ["A65", "A70"]:  # Load
                 return GL_MarketDocument_Parser()
-            elif type in ["A71", "A72", "A73", "A68", "A69", "A74", "A75"]: # Generation
+            elif document_type in ["A71", "A72", "A73", "A68", "A69", "A74", "A75"]:  # Generation
                 return GL_MarketDocument_Parser()
             else:
-                raise ValueError(type)
+                raise ValueError(document_type)
         elif tag in ["TransmissionNetwork_MarketDocument"]:
-            if type in ["A90", "A63", "A91", "A92"]:
+            if document_type in ["A90", "A63", "A91", "A92"]:
                 return TransmissionNetwork_MarketDocument_Parser()
             else:
-                raise ValueError(type)
+                raise ValueError(document_type)
         elif tag in ["Publication_MarketDocument"]:
-            if type in ["A61", "A31", "A93", "A25", "A26", "A44", "A09", "A11", "A94"]:
+            if document_type in ["A61", "A31", "A93", "A25", "A26", "A44", "A09", "A11", "A94"]:
                 return Publication_MarketDocument_Parser()
             else:
-                raise ValueError(type)
+                raise ValueError(document_type)
         elif tag in ["Balancing_MarketDocument"]:
-            if type in ["A81", "A82", "A83", "A84", "A88", "A89"]: # XML Responses
+            if document_type in ["A81", "A82", "A83", "A84", "A88", "A89"]:  # XML Responses
                 return Balancing_MarketDocument_Parser()
-            elif type in ["A85", "A86"]: # Zip Responses
+            elif document_type in ["A85", "A86"]:  # Zip Responses
                 return Balancing_MarketDocument_Parser()
-            elif type in ["A87"]: # Special "Point" Type.
+            elif document_type in ["A87"]:  # Special "Point" Type.
                 return Balancing_MarketDocument_FinancialExpensesAndIncomeForBalancing_Parser()
             else:
-                raise ValueError(type)
+                raise ValueError(document_type)
         else:
             raise ValueError(tag)
 

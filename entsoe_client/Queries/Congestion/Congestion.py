@@ -1,7 +1,9 @@
-from entsoe_client.Queries import Query
-from entsoe_client.ParameterTypes import *
-from typing import Dict, Union
+from typing import Union
+
 import pandas as pd
+
+from entsoe_client.ParameterTypes import *
+from entsoe_client.Queries import Query
 
 
 class Congestion(Query):

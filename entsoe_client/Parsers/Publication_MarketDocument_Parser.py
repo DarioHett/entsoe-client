@@ -4,6 +4,7 @@ from entsoe_client.Parsers.Entsoe_Document_Parser import Entsoe_Document_Parser
 
 class Abstract_Publication_MarketDocument_Parser(Entsoe_Document_Parser):
     def __init__(self):
+        super().__init__()
         self.Document_Parser = None
         self.TimeSeries_Parser = None
         self.Series_Period_Parser = None
