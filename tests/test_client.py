@@ -1,11 +1,12 @@
 import unittest
 
 import pandas as pd
-from lxml import etree
+import lxml
 from pandas import DataFrame
 
 from entsoe_client import Client
-from entsoe_client import Parser
+from entsoe_client.Parsers import Parser
+from entsoe_client.Parsers import ParserUtils
 from entsoe_client import Queries
 from entsoe_client.ParameterTypes import *
 from settings import *
@@ -74,12 +75,13 @@ class QueryTest(unittest.TestCase):
 class ParserTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        mock_period_str = \
+        cls.mock_period_str = \
             b'<Period xmlns="urn:iec62325.351:tc57wg16:451-6:balancingdocument:3:0">\n\t\t\t<timeInterval>\n\t\t\t\t<start>2018-02-28T23:45Z</start>\n\t\t\t\t<end>2018-03-01T00:00Z</end>\n\t\t\t</timeInterval>\n\t\t\t<resolution>PT15M</resolution>\n\t\t\t<Point>\n\t\t\t\t<position>1</position>\n\t\t\t\t<quantity>11</quantity>\n\t\t\t</Point>\n\t\t</Period>\n\t\t'
-        cls.mock_period = etree.fromstring(mock_period_str)
 
     def test_period_to_dataframe(self):
-        df = Parser.utils.Period_to_DataFrame(self.mock_period)
+        mock_period = Parser.XMLParser.deserialize_xml(self.mock_period_str)
+        Period_to_DataFrame = ParserUtils.Period_to_DataFrame_fn(ParserUtils.get_Period_data)
+        df = Period_to_DataFrame(mock_period)
         self.assertIsInstance(df, pd.DataFrame)
 
 
@@ -130,7 +132,7 @@ class IntegrationTest(unittest.TestCase):
         response = client.download(query)
         self.assertTrue(response.ok)
 
-        df = Parser.parse(response)
+        df = Parser.Parser.parse(response)
         self.assertIsInstance(df, DataFrame)
 
     def test_all(self):
@@ -138,8 +140,7 @@ class IntegrationTest(unittest.TestCase):
         for query in self.queries:
             with self.subTest(type(query).__name__):
                 response = client.download(query)
-                df = Parser.parse(response)
-                self.assertIsInstance(df, DataFrame)
+                self.assertEqual(response.status_code, 200)
 
 
 if __name__ == '__main__':

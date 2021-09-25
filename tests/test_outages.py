@@ -1,12 +1,10 @@
 import logging
 import unittest
 
-import pandas as pd
-from lxml import etree
 from pandas import DataFrame
 
 from entsoe_client import Client
-from entsoe_client import Parser
+from entsoe_client.Parsers import Parser
 from entsoe_client.Queries import Outages, Query
 from entsoe_client.ParameterTypes import *
 from settings import *
@@ -55,7 +53,7 @@ class IntegrationTest(unittest.TestCase):
         response = client.download(query)
         self.assertTrue(response.ok)
 
-        df = Parser.parse(response)
+        df = Parser.Parser.parse(response)
         self.assertIsInstance(df, DataFrame)
 
     def test_all(self):
@@ -65,7 +63,7 @@ class IntegrationTest(unittest.TestCase):
                 logging.debug(type(query).__name__)
                 print(type(query).__name__)
                 response = client.download(query)
-                df = Parser.parse(response)
+                df = Parser.Parser.parse(response)
                 self.assertIsInstance(df, DataFrame)
 
 
