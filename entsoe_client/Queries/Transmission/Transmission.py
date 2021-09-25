@@ -1,6 +1,6 @@
 from entsoe_client.Queries import Query
 from entsoe_client.ParameterTypes import *
-from typing import Dict, Union, Optional
+from typing import Dict, Union, Optional, Any
 import pandas as pd
 
 
@@ -28,8 +28,8 @@ class Transmission(Query):
                  contract_MarketAgreementType: MarketAgreementType = None,
                  in_Domain: Area = None,
                  out_Domain: Area = None,
-                 periodStart: Union[str, int, pd.Timestamp] = None,
-                 periodEnd: Union[str, int, pd.Timestamp] = None,
+                 periodStart: Union[int, str, int, pd.Timestamp] = None,
+                 periodEnd: Union[int, str, int, pd.Timestamp] = None,
                  processType: ProcessType = None,
                  auctionCategory: AuctionCategory = None,
                  update_DateAndOrTime=None,
@@ -87,11 +87,11 @@ class ExpansionDismantlingProjects(Transmission):
     """
 
     def __init__(self, in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp],
+                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp],
                  businessType: Optional[BusinessType] = None, docStatus: Optional[DocStatus] = None
                  ):
         super(ExpansionDismantlingProjects, self).__init__(
-            documentType=DocumentType.A90,
+            documentType=DocumentType('Interconnection network expansion'),
             in_Domain=in_Domain,
             out_Domain=out_Domain,
             periodStart=periodStart,
@@ -121,10 +121,10 @@ class ForecastedCapacity(Transmission):
     def __init__(self,
                  marketAgreementType: MarketAgreementType,
                  in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp],
+                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp],
                  ):
         super(ForecastedCapacity, self).__init__(
-            documentType=DocumentType.A61.name,
+            documentType=DocumentType('Estimated Net Transfer Capacity'),
             contract_MarketAgreementType=marketAgreementType,
             in_Domain=in_Domain,
             out_Domain=out_Domain,
@@ -160,10 +160,11 @@ class OfferedCapacity(Transmission):
                  auctionType: AuctionType,
                  contract_MarketAgreementType: MarketAgreementType,
                  in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp],
-                 auctionCategory: Optional[AuctionCategory],
-                 update_DateAndOrTime: int,
-                 classificationSequence_AttributeInstanceComponent_Position
+                 periodStart: Union[int, str, pd.Timestamp],
+                 periodEnd: Union[int, str, pd.Timestamp],
+                 auctionCategory: Optional[AuctionCategory] = None,
+                 update_DateAndOrTime: Optional[int] = None,
+                 classificationSequence_AttributeInstanceComponent_Position: Optional[Any] = None
                  ):
         super(OfferedCapacity, self).__init__(
             documentType=DocumentType.A31,
@@ -206,7 +207,8 @@ class FlowbasedParameters(Transmission):
     def __init__(self,
                  processType: ProcessType,
                  in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp],
+                 periodStart: Union[int, str, pd.Timestamp],
+                 periodEnd: Union[int, str, pd.Timestamp],
                  ):
         super(FlowbasedParameters, self).__init__(
             documentType=DocumentType.B11,
@@ -235,7 +237,8 @@ class IntradayTransferLimits(Transmission):
 
     def __init__(self,
                  in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp],
+                 periodStart: Union[int, str, pd.Timestamp],
+                 periodEnd: Union[int, str, pd.Timestamp],
                  ):
         super(IntradayTransferLimits, self).__init__(
             documentType=DocumentType.A93,
@@ -273,9 +276,10 @@ class ExplicitAllocationInformationCapacity(Transmission):
     def __init__(self,
                  contract_MarketAgreementType: MarketAgreementType,
                  in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp],
-                 auctionCategory: Optional[AuctionCategory],
-                 classificationSequence_AttributeInstanceComponent_Position
+                 periodStart: Union[int, str, pd.Timestamp],
+                 periodEnd: Union[int, str, pd.Timestamp],
+                 auctionCategory: Optional[AuctionCategory] = None,
+                 classificationSequence_AttributeInstanceComponent_Position = None
                  ):
         super(ExplicitAllocationInformationCapacity, self).__init__(
             documentType=DocumentType.A25,
@@ -314,7 +318,7 @@ class ExplicitAllocationInformationRevenueonly(Transmission):
     def __init__(self,
                  contract_MarketAgreementType: MarketAgreementType,
                  in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp]
+                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp]
                  ):
         super(ExplicitAllocationInformationRevenueonly, self).__init__(
             documentType=DocumentType.A25,
@@ -342,7 +346,7 @@ class TotalCapacityNominated(Transmission):
 
     def __init__(self,
                  in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp]
+                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp]
                  ):
         super(TotalCapacityNominated, self).__init__(
             documentType=DocumentType.A26,
@@ -373,7 +377,8 @@ class TotalCapacityAlreadyAllocated(Transmission):
     def __init__(self,
                  contract_MarketAgreementType: MarketAgreementType,
                  in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp]
+                 periodStart: Union[int, str, pd.Timestamp],
+                 periodEnd: Union[int, str, pd.Timestamp]
                  ):
         super(TotalCapacityAlreadyAllocated, self).__init__(
             documentType=DocumentType.A26,
@@ -399,13 +404,14 @@ class DayAheadPrices(Transmission):
     """
 
     def __init__(self,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp]
+                 in_Domain: Area,
+                 periodStart: Union[int, str, pd.Timestamp],
+                 periodEnd: Union[int, str, pd.Timestamp]
                  ):
         super(DayAheadPrices, self).__init__(
             documentType=DocumentType.A44,
             in_Domain=in_Domain,
-            out_Domain=out_Domain,
+            out_Domain=in_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd)
         assert (self.in_Domain == self.in_Domain)
@@ -431,7 +437,7 @@ class ImplicitAuctionNetPositions(Transmission):
     def __init__(self,
                  contract_MarketAgreementType: MarketAgreementType,
                  in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp]
+                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp]
                  ):
         super(ImplicitAuctionNetPositions, self).__init__(
             documentType=DocumentType.A25,
@@ -461,15 +467,16 @@ class ImplicitAuctionCongestionIncome(Transmission):
 
     def __init__(self,
                  contract_MarketAgreementType: MarketAgreementType,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp]
+                 in_Domain: Area,
+                 periodStart: Union[int, str, pd.Timestamp],
+                 periodEnd: Union[int, str, pd.Timestamp]
                  ):
         super(ImplicitAuctionCongestionIncome, self).__init__(
             documentType=DocumentType.A25,
             businessType=BusinessType.B10,
             contract_MarketAgreementType=contract_MarketAgreementType,
             in_Domain=in_Domain,
-            out_Domain=out_Domain,
+            out_Domain=in_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
         )
@@ -493,7 +500,7 @@ class CommercialSchedules(Transmission):
 
     def __init__(self,
                  in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp],
+                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp],
                  contract_MarketAgreementType: MarketAgreementType
                  ):
         super(CommercialSchedules, self).__init__(
@@ -522,7 +529,7 @@ class TotalCommercialSchedules(Transmission):
 
     def __init__(self,
                  in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp]
+                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp]
                  ):
         super(TotalCommercialSchedules, self).__init__(
             documentType=DocumentType.A09,
@@ -549,7 +556,7 @@ class DayAheadCommercialSchedules(Transmission):
 
     def __init__(self,
                  in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp]
+                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp]
                  ):
         super(DayAheadCommercialSchedules, self).__init__(
             documentType=DocumentType.A09,
@@ -576,7 +583,7 @@ class PhysicalFlows(Transmission):
 
     def __init__(self,
                  in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp]
+                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp]
                  ):
         super(PhysicalFlows, self).__init__(
             documentType=DocumentType.A11,
@@ -608,12 +615,12 @@ class CapacityAllocatedOutsideEU(Transmission):
                  auctionType: AuctionType,
                  marketAgreementType: MarketAgreementType,
                  in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp], periodEnd: Union[str, pd.Timestamp],
+                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp],
                  auctionCategory: AuctionCategory,
                  classificationSequence_AttributeInstanceComponent_Position: int
                  ):
         super(CapacityAllocatedOutsideEU, self).__init__(
-            documentType=DocumentType.A11,
+            documentType=DocumentType('Non EU allocations'),
             contract_MarketAgreementType=marketAgreementType,
             auctionType=auctionType,
             in_Domain=in_Domain,
