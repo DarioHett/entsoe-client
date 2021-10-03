@@ -28,6 +28,9 @@ class Parser:
         df = parser.parse(content)
         return df
 
+    def __call__(self, response: requests.Response):
+        return self.parse(response)
+
 
 class ZipParser:
     @staticmethod

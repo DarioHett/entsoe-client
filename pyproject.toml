@@ -1,8 +1,26 @@
 [tool.poetry]
 name = "entsoe-client"
 version = "0.1.0"
-description = "Interface to ENTSO-E API."
+description = "Formulate human-readable queries and retrieve data from ENTSO-E into pandas.DataFrame format."
+readme="README.rst"
+license="MIT"
 authors = ["Dario Hett <dariohett@gmail.com>"]
+homepage = "https://github.com/DarioHett/entsoe-client"
+repository = "https://github.com/DarioHett/entsoe-client"
+keywords = ["entsoe", "entso-e", "power", "electricity", "europe", "tso", "transparency platform"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+]
+include = [
+    "LICENSE",
+]
+
 
 [tool.poetry.dependencies]
 python = "^3.9"

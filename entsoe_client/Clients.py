@@ -65,3 +65,7 @@ class Client:
         response: requests.Response = self._request(params)
         validated_response = self._validate_response(response)
         return validated_response
+
+    def __call__(self, query: Query):
+        return self.download(query)
+
