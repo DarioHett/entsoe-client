@@ -40,7 +40,7 @@ class MasterData(Query):
             processType=processType,
             auctionCategory=auctionCategory,
             update_DateAndOrTime=update_DateAndOrTime,
-            implementation_DateAndOrTime = implementation_DateAndOrTime,
+            implementation_DateAndOrTime=implementation_DateAndOrTime,
             classificationSequence_AttributeInstanceComponent_Position= \
                 classificationSequence_AttributeInstanceComponent_Position
         )
@@ -59,6 +59,7 @@ class ProductionAndGenerationUnits(MasterData):
     Optional parameters
         PsrType
     """
+
     def __init__(self,
                  biddingZone_Domain: Area = None,
                  psrType: PsrType = None,
@@ -68,7 +69,6 @@ class ProductionAndGenerationUnits(MasterData):
             documentType=DocumentType.A95,
             businessType=BusinessType.B11,
             biddingZone_Domain=biddingZone_Domain,
-            psrType = psrType,
+            psrType=psrType,
             implementation_DateAndOrTime=implementation_DateAndOrTime
         )
-

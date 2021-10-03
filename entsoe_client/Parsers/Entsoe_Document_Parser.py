@@ -10,5 +10,5 @@ class Entsoe_Document_Parser(ABC):
 
     @classmethod
     @abstractmethod
-    def parse(self):
+    def parse(cls):
         pass

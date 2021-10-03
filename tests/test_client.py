@@ -5,7 +5,7 @@ import lxml
 from pandas import DataFrame
 
 from entsoe_client import Client
-from entsoe_client.Parsers import Parser
+from entsoe_client.Parsers import Parser, XMLParser
 from entsoe_client.Parsers import ParserUtils
 from entsoe_client import Queries
 from entsoe_client.ParameterTypes import *
@@ -79,7 +79,7 @@ class ParserTest(unittest.TestCase):
             b'<Period xmlns="urn:iec62325.351:tc57wg16:451-6:balancingdocument:3:0">\n\t\t\t<timeInterval>\n\t\t\t\t<start>2018-02-28T23:45Z</start>\n\t\t\t\t<end>2018-03-01T00:00Z</end>\n\t\t\t</timeInterval>\n\t\t\t<resolution>PT15M</resolution>\n\t\t\t<Point>\n\t\t\t\t<position>1</position>\n\t\t\t\t<quantity>11</quantity>\n\t\t\t</Point>\n\t\t</Period>\n\t\t'
 
     def test_period_to_dataframe(self):
-        mock_period = Parser.XMLParser.deserialize_xml(self.mock_period_str)
+        mock_period = XMLParser.deserialize_xml(self.mock_period_str)
         Period_to_DataFrame = ParserUtils.Period_to_DataFrame_fn(ParserUtils.get_Period_data)
         df = Period_to_DataFrame(mock_period)
         self.assertIsInstance(df, pd.DataFrame)
@@ -132,7 +132,7 @@ class IntegrationTest(unittest.TestCase):
         response = client.download(query)
         self.assertTrue(response.ok)
 
-        df = Parser.Parser.parse(response)
+        df = Parser.parse(response)
         self.assertIsInstance(df, DataFrame)
 
     def test_all(self):

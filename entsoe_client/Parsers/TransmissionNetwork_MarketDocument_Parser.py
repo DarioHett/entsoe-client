@@ -38,6 +38,5 @@ class TransmissionNetwork_MarketDocument_Parser(Abstract_TransmissionNetwork_Mar
         self.set_TimeSeries_Parser(utils.Tree_to_DataFrame(self.Series_Period_Parser, 'Period'))
         self.set_Document_Parser(utils.Tree_to_DataFrame(self.TimeSeries_Parser, 'TimeSeries'))
 
-
     def parse(self):
         return self.Document_Parser(self.objectified_input_xml)

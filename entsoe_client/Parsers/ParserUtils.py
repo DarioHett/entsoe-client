@@ -10,15 +10,9 @@ The root node holds meta-data on the global parameters of the query.
 
 A minimal, trivial parser would purely unroll such structure recursively.
 """
-# TODO: Testing suite.
-import functools
-import logging
-from io import BytesIO
-from typing import Callable, Dict, List, Any, Tuple
-from zipfile import ZipFile
+from typing import Callable, Dict, List
 
 import pandas as pd
-import requests
 from lxml import etree
 
 
@@ -44,27 +38,12 @@ def decompose_node(node: etree._Element, subnode_tag) -> tuple[dict, list]:
     if isinstance(subnode_tag, str):
         subnodes: list = node.findall(f"./{subnode_tag}", node.nsmap)
         metadata_nodes: list = node.xpath(f'./*[not(self::{subnode_tag})]',
-                                      namespaces=node.nsmap)
+                                          namespaces=node.nsmap)
         metadata: dict = {node.tag: dict(map(unfold_node, metadata_nodes))}
         return metadata, subnodes
     if isinstance(subnode_tag, list):
         # Handle multiple subnode types.
         raise NotImplementedError
-
-
-def Tree_to_DataFrame_fn(Subtree_to_DataFrame: Callable, Subtree_Tag: str) -> Callable[[etree._Element], pd.DataFrame]:
-    def Tree_to_DataFrame(root: etree._Element) -> pd.DataFrame:
-        """
-        """
-        metadata, subtree_list = decompose_node(root, Subtree_Tag)
-        meta_dict = pd.json_normalize(metadata).iloc[0].to_dict()
-        subtree_dfs = [Subtree_to_DataFrame(subtree) for subtree in  subtree_list]
-        df = pd.concat(subtree_dfs, axis=0)
-        df = df.assign(**meta_dict)
-
-        return df
-
-    return Tree_to_DataFrame
 
 
 class Tree_to_DataFrame:
@@ -75,49 +54,16 @@ class Tree_to_DataFrame:
     def __call__(self, root):
         metadata, subtree_list = decompose_node(root, self.subtree_tag)
         meta_dict = pd.json_normalize(metadata).iloc[0].to_dict()
-        subtree_dfs = [self.subtree_to_dataframe(subtree) for subtree in  subtree_list]
+        subtree_dfs = [self.subtree_to_dataframe(subtree) for subtree in subtree_list]
         df = pd.concat(subtree_dfs, axis=0)
         df = df.assign(**meta_dict)
         return df
 
 
-def Response_to_DataFrame_fn(TimeSeries_to_DataFrame: Callable) -> Callable[[str], pd.DataFrame]:
-    def Response_to_DataFrame(response_text: str) -> pd.DataFrame:
-        """
-        """
-        response_xml = drop_xml_encoding_line(response_text)
-        root = etree.fromstring(response_xml)
-
-        # get_response_timeinterval = lambda string: root.find(f'./period.timeInterval/{string}', root.nsmap).text
-        # logging.info(f"Start: {get_response_timeinterval('start')}, End: {get_response_timeinterval('end')}")
-        metadata, TimeSeries_list = decompose_node(root, 'TimeSeries')
-        meta_dict = pd.json_normalize(metadata, max_level=1).iloc[0].to_dict()
-        TimeSeries_dfs = [TimeSeries_to_DataFrame(timeseries) for timeseries in TimeSeries_list]
-        df = pd.concat(TimeSeries_dfs, axis=0)
-        df = df.assign(**meta_dict)
-
-        return df
-
-    return Response_to_DataFrame
-
-
-def TimeSeries_to_DataFrame_fn(Period_to_DataFrame: Callable) -> Callable:
-    def TimeSeries_to_DataFrame(TimeSeries: etree._Element) -> pd.DataFrame:
-        # BIG TODO: 4.2.4. Flow-based Parameters [11.1.B] seems particularly convoluted.
-        metadata, periods = decompose_node(TimeSeries, 'Period')
-        meta_dict = pd.json_normalize(metadata, max_level=1).iloc[0].to_dict()
-        period_dfs = [Period_to_DataFrame(period) for period in periods]
-        df = pd.concat(period_dfs, axis=0)
-        df = df.assign(**meta_dict)
-        return df
-
-    return TimeSeries_to_DataFrame
-
-
 def Period_to_DataFrame_fn(get_Period_data: Callable) -> Callable:
     def Period_to_DataFrame(Period: etree._Element) -> pd.DataFrame:
         """
-        Periods are implcitly valid as index is constructed independent from data extraction.
+        Periods are implicitly valid as index is constructed independent from data extraction.
         Errors would occur at DataFrame construction.
         """
         index = get_Period_index(Period)
@@ -125,9 +71,8 @@ def Period_to_DataFrame_fn(get_Period_data: Callable) -> Callable:
         assert len(data) == len(index)
         df = pd.DataFrame(data=data, index=index)
 
-
         metadata_nodes: list = Period.xpath(f'./*[not(self::Point)]',
-                                          namespaces=Period.nsmap)
+                                            namespaces=Period.nsmap)
         metadata: dict = {Period.tag: dict(map(unfold_node, metadata_nodes))}
         meta_dict = pd.json_normalize(metadata).iloc[0].to_dict()
         df = df.assign(**meta_dict)

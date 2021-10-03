@@ -69,7 +69,7 @@ class Query:
         self.periodEndUpdate = periodEndUpdate
         self.update_DateAndOrTime = update_DateAndOrTime
         self.Area_Domain = Area_Domain
-        self.implementation_DateAndOrTime=implementation_DateAndOrTime
+        self.implementation_DateAndOrTime = implementation_DateAndOrTime
         self.offset = offset
         self.mRID = mRID
 
@@ -88,7 +88,6 @@ class Query:
             return "contract_MarketAgreement.Type"
         else:
             return key
-
 
     @staticmethod
     def get_value_switch(parameter: Any):
