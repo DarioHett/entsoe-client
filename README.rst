@@ -4,11 +4,12 @@ ENTSO-E Client
 
 
 | *ENTSO-E Client* enables straight-forward access to *all* of the data at `ENTSO-E Transparency Platform <https://transparency.entsoe.eu/>`_.
+
 * Query templates abstract the API specifics through Enumerated types.
+
 * Parse responses into Pandas DataFrames without loss of *any* information.
 
-| The separation of Queries, Client and Parser with their hierarchical abstractions keep the package extensible and maintainable.
- A pipeline from Query to DataFrame is trivial, preserving the ability to customize steps in between.
+| The separation of Queries, Client and Parser with their hierarchical abstractions keep the package extensible and maintainable. A pipeline from Query to DataFrame is trivial, preserving the ability to customize steps in between.
 
 | The implementation relies primarily on the
  `Transparency Platform restful API - user guide <https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api/Guide.html>`_.
@@ -132,5 +133,6 @@ want to formulate the query as a human-readable `string`.
                                 ax=ax,
                                 **plot_params)
     [...]
+
 
 .. image:: ./sample_plot.png
