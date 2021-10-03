@@ -80,7 +80,7 @@ class IntegrationTest(unittest.TestCase):
         response = client.download(query)
         self.assertTrue(response.ok)
 
-        df = Parser.Parser.parse(response)
+        df = Parser.parse(response)
         self.assertIsInstance(df, DataFrame)
 
     def test_all(self):
@@ -88,7 +88,7 @@ class IntegrationTest(unittest.TestCase):
         for query in self.queries:
             with self.subTest(type(query).__name__):
                 response = client.download(query)
-                df = Parser.Parser.parse(response)
+                df = Parser.parse(response)
                 self.assertIsInstance(df, DataFrame)
 
 

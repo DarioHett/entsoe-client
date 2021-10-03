@@ -3,7 +3,7 @@ from entsoe_client.ParameterTypes import *
 from typing import Union
 import pandas as pd
 
-# TODO: Big one. Need to unroll timeseries with the metadata.
+
 
 class Generation(Query):
     """
@@ -45,7 +45,7 @@ class Generation(Query):
             psrType=psrType,
             auctionCategory=auctionCategory,
             update_DateAndOrTime=update_DateAndOrTime,
-            classificationSequence_AttributeInstanceComponent_Position=\
+            classificationSequence_AttributeInstanceComponent_Position= \
                 classificationSequence_AttributeInstanceComponent_Position,
             registeredResource=registeredResource
         )
@@ -203,7 +203,7 @@ class CurrentGenerationForecastsWindSolar(Generation):
             psrType=psrType
         )
 
-        
+
 class IntradayGenerationForecastsWindSolar(Generation):
     """
     4.4.6. Intraday Generation Forecasts for Wind and Solar [14.1.D]

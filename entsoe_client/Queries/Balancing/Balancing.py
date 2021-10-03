@@ -84,9 +84,10 @@ class CurrentBalancingState(Balancing):
             Area_Domain
             TimeInterval or combination of PeriodStart and PeriodEnd
     """
+
     def __init__(
             self,
-            Area_Domain=None, # Does not appear in documentation.
+            Area_Domain=None,  # Does not appear in documentation.
             periodStart=None,
             periodEnd=None,
     ):
@@ -112,6 +113,7 @@ class AggregatedBalancingEnergyBids(Balancing):
     ProcessType can potentially vary (different reserves);
     ENTSOE Example uses aFRR (A51).
     """
+
     def __init__(
             self,
             processType: ProcessType = ProcessType.A51,
@@ -143,6 +145,7 @@ class ProcuredBalancingCapacity(Balancing):
     ProcessType can potentially vary (different reserves);
     ENTSOE Example uses aFRR (A51).
     """
+
     def __init__(
             self,
             processType: ProcessType = ProcessType.A51,
@@ -160,6 +163,7 @@ class ProcuredBalancingCapacity(Balancing):
             type_MarketAgreementType=type_MarketAgreementType
         )
 
+
 class UseOfAllocatedCrossZonalBalancingCapacity(Balancing):
     """
     4.6.4. Use of Allocated Cross-Zonal Balancing Capacity [GL EB 12.3.H&I]
@@ -175,6 +179,7 @@ class UseOfAllocatedCrossZonalBalancingCapacity(Balancing):
     ProcessType can potentially vary (different reserves);
     ENTSOE Example uses replacement reserve (A46).
     """
+
     def __init__(
             self,
             processType: ProcessType = ProcessType.A46,
@@ -211,6 +216,7 @@ class AmountOfBalancingReservesUnderContract(Balancing):
             The offset ∈ [0,4800] so that paging is restricted to query for 4900 documents max.,
             offset=n returns files in sequence between n+1 and n+100)
     """
+
     def __init__(
             self,
             type_MarketAgreementType: MarketAgreementType = None,
@@ -249,6 +255,7 @@ class PricesOfProcuredBalancingReserves(Balancing):
                 The offset ∈ [0,4800] so that paging is restricted to query for 4900 documents max.,
                 offset=n returns files in sequence between n+1 and n+100)
     """
+
     def __init__(
             self,
             type_MarketAgreementType: MarketAgreementType = MarketAgreementType("Daily"),
@@ -284,6 +291,7 @@ class AcceptedAggregatedOffers(Balancing):
         BusinessType
         PsrType
     """
+
     def __init__(
             self,
             controlArea_Domain: Area = None,
@@ -302,7 +310,6 @@ class AcceptedAggregatedOffers(Balancing):
         )
 
 
-
 class ActivatedBalancingEnergy(Balancing):
     """
     4.6.8. Activated Balancing Energy [17.1.E]
@@ -319,6 +326,7 @@ class ActivatedBalancingEnergy(Balancing):
     BusinessType can potentially vary (different reserves);
     ENTSOE Example uses FCR.
     """
+
     def __init__(
             self,
             controlArea_Domain: Area = None,
@@ -336,6 +344,7 @@ class ActivatedBalancingEnergy(Balancing):
             psrType=psrType
         )
 
+
 class PricesOfActivatedBalancingEnergy(Balancing):
     """
     4.6.9. Prices of Activated Balancing Energy [17.1.F]
@@ -352,6 +361,7 @@ class PricesOfActivatedBalancingEnergy(Balancing):
     BusinessType can potentially vary (different reserves);
     ENTSOE Example uses aFRR (A96).
     """
+
     def __init__(
             self,
             controlArea_Domain: Area = None,
@@ -382,6 +392,7 @@ class ImbalancePrices(Balancing):
     Optional parameters
         PsrType
     """
+
     def __init__(
             self,
             controlArea_Domain: Area = None,
@@ -397,6 +408,7 @@ class ImbalancePrices(Balancing):
             psrType=psrType
         )
 
+
 class TotalImbalanceVolumes(Balancing):
     """
     4.6.11. Total Imbalance Volumes [17.1.H]
@@ -407,6 +419,7 @@ class TotalImbalanceVolumes(Balancing):
         ControlArea_Domain
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
+
     def __init__(
             self,
             controlArea_Domain: Area = None,
@@ -431,6 +444,7 @@ class FinancialExpensesAndIncomeForBalancing(Balancing):
         ControlArea_Domain
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
+
     def __init__(
             self,
             controlArea_Domain: Area = None,
@@ -443,7 +457,7 @@ class FinancialExpensesAndIncomeForBalancing(Balancing):
             periodStart=periodStart,
             periodEnd=periodEnd
         )
-        
+
 
 class CrossborderBalancing(Balancing):
     """
@@ -459,6 +473,7 @@ class CrossborderBalancing(Balancing):
     quantity contains the activated offers and prices are available in the minimum_Price.amount and
     maximum_Price.amount attributes.
     """
+
     def __init__(
             self,
             Acquiring_Domain: Area = None,
@@ -485,6 +500,7 @@ class FCRTotalCapacity(Balancing):
         Area_Domain
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
+
     def __init__(
             self,
             businessType: BusinessType = BusinessType.A25,
@@ -511,6 +527,7 @@ class SharesOfFCRCapacity_ShareOfCapacity(Balancing):
         Area_Domain
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
+
     def __init__(
             self,
             Area_Domain: Area = None,
@@ -536,6 +553,7 @@ class SharesOfFCRCapacity_ContractedReserveCapacity(Balancing):
         Area_Domain
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
+
     def __init__(
             self,
             Area_Domain: Area = None,
@@ -561,6 +579,7 @@ class FRRActualCapacity(Balancing):
         Area_Domain
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
+
     def __init__(
             self,
             Area_Domain: Area = None,
@@ -587,6 +606,7 @@ class RRActualCapacity(Balancing):
         Area_Domain
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
+
     def __init__(
             self,
             Area_Domain: Area = None,
@@ -601,6 +621,7 @@ class RRActualCapacity(Balancing):
             periodStart=periodStart,
             periodEnd=periodEnd
         )
+
 
 class SharingOfRRAndFRR(Balancing):
     """
@@ -617,6 +638,7 @@ class SharingOfRRAndFRR(Balancing):
     ProcessType can potentially vary (different reserves);
     ENTSOE Example uses FRR (A56).
     """
+
     def __init__(self, processType: ProcessType = ProcessType.A56, Acquiring_Domain: Area = None,
                  Connecting_Domain: Area = None, periodStart=None, periodEnd=None):
         super(SharingOfRRAndFRR, self).__init__(
@@ -628,5 +650,3 @@ class SharingOfRRAndFRR(Balancing):
             periodStart=periodStart,
             periodEnd=periodEnd
         )
-        super().__init__(processType, Acquiring_Domain, Connecting_Domain, periodStart, periodEnd)
-

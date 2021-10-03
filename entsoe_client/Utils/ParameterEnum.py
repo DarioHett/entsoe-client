@@ -12,7 +12,7 @@ class ParameterEnum(Enum):
     def help(cls):
         prefix = ['--- '+cls.__name__+' ---']
         schema = ['API_PARAMETER: DESCRIPTION']
-        key_value_list = [f"{k}: {v}" for (k,v) in cls.dict().items()]
+        key_value_list = [f"{k}: {v}" for (k, v) in cls.dict().items()]
         suffix = ['--- '+cls.__name__+' ---']
         help_string = "\n".join(prefix+schema+key_value_list+schema+suffix)
         print(help_string)
