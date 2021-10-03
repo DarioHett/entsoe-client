@@ -7,18 +7,20 @@ import pandas as pd
 class Load(Query):
     """4.1 Load domain."""
 
-    def __init__(self,
-                 # documentType: DocumentType,
-                 processType: ProcessType = None,
-                 outBiddingZone_Domain: Area = None,
-                 periodStart: Union[str, pd.Timestamp] = None,
-                 periodEnd: Union[str, pd.Timestamp] = None):
+    def __init__(
+        self,
+        # documentType: DocumentType,
+        processType: ProcessType = None,
+        outBiddingZone_Domain: Area = None,
+        periodStart: Union[str, pd.Timestamp] = None,
+        periodEnd: Union[str, pd.Timestamp] = None,
+    ):
         super(Load, self).__init__(
             documentType=DocumentType.A65,
             processType=processType,
             outBiddingZone_Domain=outBiddingZone_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd
+            periodEnd=periodEnd,
         )
 
 
@@ -36,15 +38,18 @@ class ActualTotalLoad(Load):
     # q = ActualTotalLoad(Area.CZ, '201512312300', '201612312300')
     """
 
-    def __init__(self,
-                 outBiddingZone_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp],
-                 periodEnd: Union[str, pd.Timestamp]):
+    def __init__(
+        self,
+        outBiddingZone_Domain: Area,
+        periodStart: Union[str, pd.Timestamp],
+        periodEnd: Union[str, pd.Timestamp],
+    ):
         super(ActualTotalLoad, self).__init__(
             processType=ProcessType.A16,
             outBiddingZone_Domain=outBiddingZone_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd)
+            periodEnd=periodEnd,
+        )
 
 
 class DayAheadTotalLoad(Load):
@@ -59,12 +64,13 @@ class DayAheadTotalLoad(Load):
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
 
-    def __init__(self,
-                 outBiddingZone_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp],
-                 periodEnd: Union[str, pd.Timestamp]):
-        super().__init__(ProcessType.A01,
-                         outBiddingZone_Domain, periodStart, periodEnd)
+    def __init__(
+        self,
+        outBiddingZone_Domain: Area,
+        periodStart: Union[str, pd.Timestamp],
+        periodEnd: Union[str, pd.Timestamp],
+    ):
+        super().__init__(ProcessType.A01, outBiddingZone_Domain, periodStart, periodEnd)
 
     def __call__(self) -> Dict:
         return super(DayAheadTotalLoad, self).__call__()
@@ -82,12 +88,13 @@ class WeekAheadTotalLoad(Load):
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
 
-    def __init__(self,
-                 outBiddingZone_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp],
-                 periodEnd: Union[str, pd.Timestamp]):
-        super().__init__(ProcessType.A31,
-                         outBiddingZone_Domain, periodStart, periodEnd)
+    def __init__(
+        self,
+        outBiddingZone_Domain: Area,
+        periodStart: Union[str, pd.Timestamp],
+        periodEnd: Union[str, pd.Timestamp],
+    ):
+        super().__init__(ProcessType.A31, outBiddingZone_Domain, periodStart, periodEnd)
 
     def __call__(self) -> Dict:
         return super(WeekAheadTotalLoad, self).__call__()
@@ -105,12 +112,13 @@ class MonthAheadTotalLoad(Load):
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
 
-    def __init__(self,
-                 outBiddingZone_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp],
-                 periodEnd: Union[str, pd.Timestamp]):
-        super().__init__(ProcessType.A32,
-                         outBiddingZone_Domain, periodStart, periodEnd)
+    def __init__(
+        self,
+        outBiddingZone_Domain: Area,
+        periodStart: Union[str, pd.Timestamp],
+        periodEnd: Union[str, pd.Timestamp],
+    ):
+        super().__init__(ProcessType.A32, outBiddingZone_Domain, periodStart, periodEnd)
 
 
 class YearAheadTotalLoad(Load):
@@ -125,9 +133,10 @@ class YearAheadTotalLoad(Load):
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
 
-    def __init__(self,
-                 outBiddingZone_Domain: Area,
-                 periodStart: Union[str, pd.Timestamp],
-                 periodEnd: Union[str, pd.Timestamp]):
-        super().__init__(ProcessType.A33,
-                         outBiddingZone_Domain, periodStart, periodEnd)
+    def __init__(
+        self,
+        outBiddingZone_Domain: Area,
+        periodStart: Union[str, pd.Timestamp],
+        periodEnd: Union[str, pd.Timestamp],
+    ):
+        super().__init__(ProcessType.A33, outBiddingZone_Domain, periodStart, periodEnd)

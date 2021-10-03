@@ -8,36 +8,37 @@ class Balancing(Query):
     Exhaustive parameter list.
     """
 
-    def __init__(self,
-                 documentType: DocumentType = None,
-                 docStatus: DocStatus = None,
-                 processType: ProcessType = None,
-                 businessType: BusinessType = None,
-                 psrType: PsrType = None,
-                 type_MarketAgreementType: MarketAgreementType = None,
-                 contract_MarketAgreementType: MarketAgreementType = None,
-                 auctionType: AuctionType = None,
-                 auctionCategory: AuctionCategory = None,
-                 classificationSequence_AttributeInstanceComponent_Position: int = None,
-                 outBiddingZone_Domain: Area = None,
-                 biddingZone_Domain: Area = None,
-                 controlArea_Domain: Area = None,
-                 in_Domain: Area = None,
-                 out_Domain: Area = None,
-                 Acquiring_Domain: Area = None,
-                 Connecting_Domain: Area = None,
-                 registeredResource=None,
-                 timeInterval=None,
-                 periodStart=None,
-                 periodEnd=None,
-                 timeIntervalUpdate=None,
-                 periodStartUpdate=None,
-                 periodEndUpdate=None,
-                 update_DateAndOrTime=None,
-                 implementation_DateAndOrTime=None,  # Does not appear in Documentation; MasterData.
-                 Area_Domain=None,  # Does not appear in documentation.
-                 offset=None
-                 ):
+    def __init__(
+        self,
+        documentType: DocumentType = None,
+        docStatus: DocStatus = None,
+        processType: ProcessType = None,
+        businessType: BusinessType = None,
+        psrType: PsrType = None,
+        type_MarketAgreementType: MarketAgreementType = None,
+        contract_MarketAgreementType: MarketAgreementType = None,
+        auctionType: AuctionType = None,
+        auctionCategory: AuctionCategory = None,
+        classificationSequence_AttributeInstanceComponent_Position: int = None,
+        outBiddingZone_Domain: Area = None,
+        biddingZone_Domain: Area = None,
+        controlArea_Domain: Area = None,
+        in_Domain: Area = None,
+        out_Domain: Area = None,
+        Acquiring_Domain: Area = None,
+        Connecting_Domain: Area = None,
+        registeredResource=None,
+        timeInterval=None,
+        periodStart=None,
+        periodEnd=None,
+        timeIntervalUpdate=None,
+        periodStartUpdate=None,
+        periodEndUpdate=None,
+        update_DateAndOrTime=None,
+        implementation_DateAndOrTime=None,  # Does not appear in Documentation; MasterData.
+        Area_Domain=None,  # Does not appear in documentation.
+        offset=None,
+    ):
         """
         Appendix A: Complete parameter list
         A.1.Available parameters
@@ -70,7 +71,7 @@ class Balancing(Query):
             update_DateAndOrTime=update_DateAndOrTime,
             Area_Domain=Area_Domain,
             implementation_DateAndOrTime=implementation_DateAndOrTime,
-            offset=offset
+            offset=offset,
         )
 
 
@@ -86,10 +87,10 @@ class CurrentBalancingState(Balancing):
     """
 
     def __init__(
-            self,
-            Area_Domain=None,  # Does not appear in documentation.
-            periodStart=None,
-            periodEnd=None,
+        self,
+        Area_Domain=None,  # Does not appear in documentation.
+        periodStart=None,
+        periodEnd=None,
     ):
         super(CurrentBalancingState, self).__init__(
             documentType=DocumentType.A86,
@@ -115,11 +116,11 @@ class AggregatedBalancingEnergyBids(Balancing):
     """
 
     def __init__(
-            self,
-            processType: ProcessType = ProcessType.A51,
-            Area_Domain: Area = None,  # Does not appear in documentation.
-            periodStart=None,
-            periodEnd=None,
+        self,
+        processType: ProcessType = ProcessType.A51,
+        Area_Domain: Area = None,  # Does not appear in documentation.
+        periodStart=None,
+        periodEnd=None,
     ):
         super(AggregatedBalancingEnergyBids, self).__init__(
             documentType=DocumentType.A24,
@@ -147,12 +148,12 @@ class ProcuredBalancingCapacity(Balancing):
     """
 
     def __init__(
-            self,
-            processType: ProcessType = ProcessType.A51,
-            Area_Domain: Area = None,  # Does not appear in documentation.
-            periodStart=None,
-            periodEnd=None,
-            type_MarketAgreementType: MarketAgreementType = None,
+        self,
+        processType: ProcessType = ProcessType.A51,
+        Area_Domain: Area = None,  # Does not appear in documentation.
+        periodStart=None,
+        periodEnd=None,
+        type_MarketAgreementType: MarketAgreementType = None,
     ):
         super(ProcuredBalancingCapacity, self).__init__(
             documentType=DocumentType.A15,
@@ -160,7 +161,7 @@ class ProcuredBalancingCapacity(Balancing):
             Area_Domain=Area_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
-            type_MarketAgreementType=type_MarketAgreementType
+            type_MarketAgreementType=type_MarketAgreementType,
         )
 
 
@@ -181,13 +182,13 @@ class UseOfAllocatedCrossZonalBalancingCapacity(Balancing):
     """
 
     def __init__(
-            self,
-            processType: ProcessType = ProcessType.A46,
-            periodStart=None,
-            periodEnd=None,
-            Acquiring_Domain: Area = None,
-            Connecting_Domain: Area = None,
-            type_MarketAgreementType: MarketAgreementType = None,
+        self,
+        processType: ProcessType = ProcessType.A46,
+        periodStart=None,
+        periodEnd=None,
+        Acquiring_Domain: Area = None,
+        Connecting_Domain: Area = None,
+        type_MarketAgreementType: MarketAgreementType = None,
     ):
         super(UseOfAllocatedCrossZonalBalancingCapacity, self).__init__(
             documentType=DocumentType.A38,
@@ -196,7 +197,7 @@ class UseOfAllocatedCrossZonalBalancingCapacity(Balancing):
             Connecting_Domain=Connecting_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
-            type_MarketAgreementType=type_MarketAgreementType
+            type_MarketAgreementType=type_MarketAgreementType,
         )
 
 
@@ -218,14 +219,14 @@ class AmountOfBalancingReservesUnderContract(Balancing):
     """
 
     def __init__(
-            self,
-            type_MarketAgreementType: MarketAgreementType = None,
-            controlArea_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None,
-            businessType: BusinessType = BusinessType.A95,
-            psrType: PsrType = None,
-            offset: int = None
+        self,
+        type_MarketAgreementType: MarketAgreementType = None,
+        controlArea_Domain: Area = None,
+        periodStart=None,
+        periodEnd=None,
+        businessType: BusinessType = BusinessType.A95,
+        psrType: PsrType = None,
+        offset: int = None,
     ):
         super(AmountOfBalancingReservesUnderContract, self).__init__(
             documentType=DocumentType.A81,
@@ -235,7 +236,7 @@ class AmountOfBalancingReservesUnderContract(Balancing):
             periodEnd=periodEnd,
             businessType=businessType,
             psrType=psrType,
-            offset=offset
+            offset=offset,
         )
 
 
@@ -257,14 +258,14 @@ class PricesOfProcuredBalancingReserves(Balancing):
     """
 
     def __init__(
-            self,
-            type_MarketAgreementType: MarketAgreementType = MarketAgreementType("Daily"),
-            controlArea_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None,
-            businessType: BusinessType = BusinessType("Frequency containment reserve"),
-            psrType: PsrType = None,
-            offset: int = None
+        self,
+        type_MarketAgreementType: MarketAgreementType = MarketAgreementType("Daily"),
+        controlArea_Domain: Area = None,
+        periodStart=None,
+        periodEnd=None,
+        businessType: BusinessType = BusinessType("Frequency containment reserve"),
+        psrType: PsrType = None,
+        offset: int = None,
     ):
         super(PricesOfProcuredBalancingReserves, self).__init__(
             documentType=DocumentType.A89,
@@ -274,7 +275,7 @@ class PricesOfProcuredBalancingReserves(Balancing):
             periodEnd=periodEnd,
             businessType=businessType,
             psrType=psrType,
-            offset=offset
+            offset=offset,
         )
 
 
@@ -293,12 +294,12 @@ class AcceptedAggregatedOffers(Balancing):
     """
 
     def __init__(
-            self,
-            controlArea_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None,
-            businessType: BusinessType = BusinessType("Frequency containment reserve"),
-            psrType: PsrType = None
+        self,
+        controlArea_Domain: Area = None,
+        periodStart=None,
+        periodEnd=None,
+        businessType: BusinessType = BusinessType("Frequency containment reserve"),
+        psrType: PsrType = None,
     ):
         super(AcceptedAggregatedOffers, self).__init__(
             documentType=DocumentType.A82,
@@ -306,7 +307,7 @@ class AcceptedAggregatedOffers(Balancing):
             periodStart=periodStart,
             periodEnd=periodEnd,
             businessType=businessType,
-            psrType=psrType
+            psrType=psrType,
         )
 
 
@@ -328,12 +329,12 @@ class ActivatedBalancingEnergy(Balancing):
     """
 
     def __init__(
-            self,
-            controlArea_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None,
-            businessType: BusinessType = BusinessType('Frequency containment reserve'),
-            psrType: PsrType = None
+        self,
+        controlArea_Domain: Area = None,
+        periodStart=None,
+        periodEnd=None,
+        businessType: BusinessType = BusinessType("Frequency containment reserve"),
+        psrType: PsrType = None,
     ):
         super(ActivatedBalancingEnergy, self).__init__(
             documentType=DocumentType.A83,
@@ -341,7 +342,7 @@ class ActivatedBalancingEnergy(Balancing):
             periodStart=periodStart,
             periodEnd=periodEnd,
             businessType=businessType,
-            psrType=psrType
+            psrType=psrType,
         )
 
 
@@ -363,12 +364,12 @@ class PricesOfActivatedBalancingEnergy(Balancing):
     """
 
     def __init__(
-            self,
-            controlArea_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None,
-            businessType: BusinessType = BusinessType('Frequency containment reserve'),
-            psrType: PsrType = None
+        self,
+        controlArea_Domain: Area = None,
+        periodStart=None,
+        periodEnd=None,
+        businessType: BusinessType = BusinessType("Frequency containment reserve"),
+        psrType: PsrType = None,
     ):
         super(PricesOfActivatedBalancingEnergy, self).__init__(
             documentType=DocumentType.A84,
@@ -394,18 +395,18 @@ class ImbalancePrices(Balancing):
     """
 
     def __init__(
-            self,
-            controlArea_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None,
-            psrType: PsrType = None
+        self,
+        controlArea_Domain: Area = None,
+        periodStart=None,
+        periodEnd=None,
+        psrType: PsrType = None,
     ):
         super(ImbalancePrices, self).__init__(
             documentType=DocumentType.A85,
             controlArea_Domain=controlArea_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
-            psrType=psrType
+            psrType=psrType,
         )
 
 
@@ -421,16 +422,13 @@ class TotalImbalanceVolumes(Balancing):
     """
 
     def __init__(
-            self,
-            controlArea_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None
+        self, controlArea_Domain: Area = None, periodStart=None, periodEnd=None
     ):
         super(TotalImbalanceVolumes, self).__init__(
             documentType=DocumentType.A86,
             controlArea_Domain=controlArea_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd
+            periodEnd=periodEnd,
         )
 
 
@@ -446,16 +444,13 @@ class FinancialExpensesAndIncomeForBalancing(Balancing):
     """
 
     def __init__(
-            self,
-            controlArea_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None
+        self, controlArea_Domain: Area = None, periodStart=None, periodEnd=None
     ):
         super(FinancialExpensesAndIncomeForBalancing, self).__init__(
             documentType=DocumentType.A87,
             controlArea_Domain=controlArea_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd
+            periodEnd=periodEnd,
         )
 
 
@@ -475,18 +470,18 @@ class CrossborderBalancing(Balancing):
     """
 
     def __init__(
-            self,
-            Acquiring_Domain: Area = None,
-            Connecting_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None
+        self,
+        Acquiring_Domain: Area = None,
+        Connecting_Domain: Area = None,
+        periodStart=None,
+        periodEnd=None,
     ):
         super(CrossborderBalancing, self).__init__(
             documentType=DocumentType.A88,
             Acquiring_Domain=Acquiring_Domain,
             Connecting_Domain=Connecting_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd
+            periodEnd=periodEnd,
         )
 
 
@@ -502,18 +497,18 @@ class FCRTotalCapacity(Balancing):
     """
 
     def __init__(
-            self,
-            businessType: BusinessType = BusinessType.A25,
-            Area_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None
+        self,
+        businessType: BusinessType = BusinessType.A25,
+        Area_Domain: Area = None,
+        periodStart=None,
+        periodEnd=None,
     ):
         super(FCRTotalCapacity, self).__init__(
             documentType=DocumentType.A26,
             businessType=businessType,
             Area_Domain=Area_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd
+            periodEnd=periodEnd,
         )
 
 
@@ -528,18 +523,13 @@ class SharesOfFCRCapacity_ShareOfCapacity(Balancing):
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
 
-    def __init__(
-            self,
-            Area_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None
-    ):
+    def __init__(self, Area_Domain: Area = None, periodStart=None, periodEnd=None):
         super(SharesOfFCRCapacity_ShareOfCapacity, self).__init__(
             documentType=DocumentType.A26,
             businessType=BusinessType.C23,
             Area_Domain=Area_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd
+            periodEnd=periodEnd,
         )
 
 
@@ -554,18 +544,13 @@ class SharesOfFCRCapacity_ContractedReserveCapacity(Balancing):
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
 
-    def __init__(
-            self,
-            Area_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None
-    ):
+    def __init__(self, Area_Domain: Area = None, periodStart=None, periodEnd=None):
         super(SharesOfFCRCapacity_ContractedReserveCapacity, self).__init__(
             documentType=DocumentType.A26,
             businessType=BusinessType.B95,
             Area_Domain=Area_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd
+            periodEnd=periodEnd,
         )
 
 
@@ -580,19 +565,14 @@ class FRRActualCapacity(Balancing):
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
 
-    def __init__(
-            self,
-            Area_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None
-    ):
+    def __init__(self, Area_Domain: Area = None, periodStart=None, periodEnd=None):
         super(FRRActualCapacity, self).__init__(
             documentType=DocumentType.A26,
             processType=ProcessType.A56,
             businessType=BusinessType.C24,
             Area_Domain=Area_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd
+            periodEnd=periodEnd,
         )
 
 
@@ -607,19 +587,14 @@ class RRActualCapacity(Balancing):
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
 
-    def __init__(
-            self,
-            Area_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None
-    ):
+    def __init__(self, Area_Domain: Area = None, periodStart=None, periodEnd=None):
         super(RRActualCapacity, self).__init__(
             documentType=DocumentType.A26,
             processType=ProcessType.A46,
             businessType=BusinessType.C24,
             Area_Domain=Area_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd
+            periodEnd=periodEnd,
         )
 
 
@@ -639,8 +614,14 @@ class SharingOfRRAndFRR(Balancing):
     ENTSOE Example uses FRR (A56).
     """
 
-    def __init__(self, processType: ProcessType = ProcessType.A56, Acquiring_Domain: Area = None,
-                 Connecting_Domain: Area = None, periodStart=None, periodEnd=None):
+    def __init__(
+        self,
+        processType: ProcessType = ProcessType.A56,
+        Acquiring_Domain: Area = None,
+        Connecting_Domain: Area = None,
+        periodStart=None,
+        periodEnd=None,
+    ):
         super(SharingOfRRAndFRR, self).__init__(
             documentType=DocumentType.A26,
             businessType=BusinessType.C22,
@@ -648,5 +629,5 @@ class SharingOfRRAndFRR(Balancing):
             Acquiring_Domain=Acquiring_Domain,
             Connecting_Domain=Connecting_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd
+            periodEnd=periodEnd,
         )

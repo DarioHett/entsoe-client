@@ -20,21 +20,22 @@ class Transmission(Query):
 
     """
 
-    def __init__(self,
-                 documentType: DocumentType = None,
-                 docStatus: DocStatus = None,
-                 auctionType: AuctionType = None,
-                 businessType: BusinessType = None,
-                 contract_MarketAgreementType: MarketAgreementType = None,
-                 in_Domain: Area = None,
-                 out_Domain: Area = None,
-                 periodStart: Union[int, str, int, pd.Timestamp] = None,
-                 periodEnd: Union[int, str, int, pd.Timestamp] = None,
-                 processType: ProcessType = None,
-                 auctionCategory: AuctionCategory = None,
-                 update_DateAndOrTime=None,
-                 classificationSequence_AttributeInstanceComponent_Position: int = None
-                 ):
+    def __init__(
+        self,
+        documentType: DocumentType = None,
+        docStatus: DocStatus = None,
+        auctionType: AuctionType = None,
+        businessType: BusinessType = None,
+        contract_MarketAgreementType: MarketAgreementType = None,
+        in_Domain: Area = None,
+        out_Domain: Area = None,
+        periodStart: Union[int, str, int, pd.Timestamp] = None,
+        periodEnd: Union[int, str, int, pd.Timestamp] = None,
+        processType: ProcessType = None,
+        auctionCategory: AuctionCategory = None,
+        update_DateAndOrTime=None,
+        classificationSequence_AttributeInstanceComponent_Position: int = None,
+    ):
         super(Transmission, self).__init__(
             documentType=documentType,
             docStatus=docStatus,
@@ -48,21 +49,31 @@ class Transmission(Query):
             processType=processType,
             auctionCategory=auctionCategory,
             update_DateAndOrTime=update_DateAndOrTime,
-            classificationSequence_AttributeInstanceComponent_Position= \
-                classificationSequence_AttributeInstanceComponent_Position
+            classificationSequence_AttributeInstanceComponent_Position=classificationSequence_AttributeInstanceComponent_Position,
         )
 
     def __call__(self) -> Dict:
         _ = super(Transmission, self).__call__()
-        _ = dict(('classificationSequence_AttributeInstanceComponent.Position', v)
-                 if k == 'classificationSequence_AttributeInstanceComponent_Position' else (k, v)
-                 for (k, v) in _.items())
-        _ = dict(('contract_MarketAgreement.Type', v) if k == 'contract_MarketAgreementType'
-                 else (k, v) for (k, v) in _.items())
-        _ = dict(('auction.Type', v) if k == 'auctionType'
-                 else (k, v) for (k, v) in _.items())
-        _ = dict(('auction.Category', v) if k == 'auctionCategory'
-                 else (k, v) for (k, v) in _.items())
+        _ = dict(
+            ("classificationSequence_AttributeInstanceComponent.Position", v)
+            if k == "classificationSequence_AttributeInstanceComponent_Position"
+            else (k, v)
+            for (k, v) in _.items()
+        )
+        _ = dict(
+            ("contract_MarketAgreement.Type", v)
+            if k == "contract_MarketAgreementType"
+            else (k, v)
+            for (k, v) in _.items()
+        )
+        _ = dict(
+            ("auction.Type", v) if k == "auctionType" else (k, v)
+            for (k, v) in _.items()
+        )
+        _ = dict(
+            ("auction.Category", v) if k == "auctionCategory" else (k, v)
+            for (k, v) in _.items()
+        )
         return _
 
 
@@ -86,18 +97,23 @@ class ExpansionDismantlingProjects(Transmission):
     #                                  businessType=BusinessType.B01)
     """
 
-    def __init__(self, in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp],
-                 businessType: Optional[BusinessType] = None, docStatus: Optional[DocStatus] = None
-                 ):
+    def __init__(
+        self,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+        businessType: Optional[BusinessType] = None,
+        docStatus: Optional[DocStatus] = None,
+    ):
         super(ExpansionDismantlingProjects, self).__init__(
-            documentType=DocumentType('Interconnection network expansion'),
+            documentType=DocumentType("Interconnection network expansion"),
             in_Domain=in_Domain,
             out_Domain=out_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
             businessType=businessType,
-            docStatus=docStatus
+            docStatus=docStatus,
         )
 
 
@@ -118,18 +134,21 @@ class ForecastedCapacity(Transmission):
     #                        periodStart='201512312300', periodEnd='201612312300')
     """
 
-    def __init__(self,
-                 marketAgreementType: MarketAgreementType,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp],
-                 ):
+    def __init__(
+        self,
+        marketAgreementType: MarketAgreementType,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+    ):
         super(ForecastedCapacity, self).__init__(
-            documentType=DocumentType('Estimated Net Transfer Capacity'),
+            documentType=DocumentType("Estimated Net Transfer Capacity"),
             contract_MarketAgreementType=marketAgreementType,
             in_Domain=in_Domain,
             out_Domain=out_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd
+            periodEnd=periodEnd,
         )
 
 
@@ -156,16 +175,20 @@ class OfferedCapacity(Transmission):
     TODO: `quried` typo imported from original ENTSO-E documentation
     """
 
-    def __init__(self,
-                 auctionType: AuctionType,
-                 contract_MarketAgreementType: MarketAgreementType,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp],
-                 periodEnd: Union[int, str, pd.Timestamp],
-                 auctionCategory: Optional[AuctionCategory] = None,
-                 update_DateAndOrTime: Optional[int] = None,
-                 classificationSequence_AttributeInstanceComponent_Position: Optional[Any] = None
-                 ):
+    def __init__(
+        self,
+        auctionType: AuctionType,
+        contract_MarketAgreementType: MarketAgreementType,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+        auctionCategory: Optional[AuctionCategory] = None,
+        update_DateAndOrTime: Optional[int] = None,
+        classificationSequence_AttributeInstanceComponent_Position: Optional[
+            Any
+        ] = None,
+    ):
         super(OfferedCapacity, self).__init__(
             documentType=DocumentType.A31,
             auctionType=auctionType,
@@ -176,8 +199,7 @@ class OfferedCapacity(Transmission):
             periodEnd=periodEnd,
             auctionCategory=auctionCategory,
             update_DateAndOrTime=update_DateAndOrTime,
-            classificationSequence_AttributeInstanceComponent_Position= \
-                classificationSequence_AttributeInstanceComponent_Position,
+            classificationSequence_AttributeInstanceComponent_Position=classificationSequence_AttributeInstanceComponent_Position,
         )
 
     def __call__(self) -> Dict:
@@ -204,19 +226,21 @@ class FlowbasedParameters(Transmission):
     #                         periodStart='201512312300', periodEnd='201601012300')
     """
 
-    def __init__(self,
-                 processType: ProcessType,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp],
-                 periodEnd: Union[int, str, pd.Timestamp],
-                 ):
+    def __init__(
+        self,
+        processType: ProcessType,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+    ):
         super(FlowbasedParameters, self).__init__(
             documentType=DocumentType.B11,
             processType=processType,
             in_Domain=in_Domain,
             out_Domain=out_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd
+            periodEnd=periodEnd,
         )
 
 
@@ -235,17 +259,20 @@ class IntradayTransferLimits(Transmission):
     #                         periodStart='201512312300', periodEnd='201601312300')
     """
 
-    def __init__(self,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp],
-                 periodEnd: Union[int, str, pd.Timestamp],
-                 ):
+    def __init__(
+        self,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+    ):
         super(IntradayTransferLimits, self).__init__(
             documentType=DocumentType.A93,
             in_Domain=in_Domain,
             out_Domain=out_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd)
+            periodEnd=periodEnd,
+        )
 
 
 class ExplicitAllocationInformationCapacity(Transmission):
@@ -273,14 +300,16 @@ class ExplicitAllocationInformationCapacity(Transmission):
         classificationSequence_AttributeInstanceComponent_Position=1)
     """
 
-    def __init__(self,
-                 contract_MarketAgreementType: MarketAgreementType,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp],
-                 periodEnd: Union[int, str, pd.Timestamp],
-                 auctionCategory: Optional[AuctionCategory] = None,
-                 classificationSequence_AttributeInstanceComponent_Position = None
-                 ):
+    def __init__(
+        self,
+        contract_MarketAgreementType: MarketAgreementType,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+        auctionCategory: Optional[AuctionCategory] = None,
+        classificationSequence_AttributeInstanceComponent_Position=None,
+    ):
         super(ExplicitAllocationInformationCapacity, self).__init__(
             documentType=DocumentType.A25,
             businessType=BusinessType.B05,
@@ -290,8 +319,7 @@ class ExplicitAllocationInformationCapacity(Transmission):
             periodStart=periodStart,
             periodEnd=periodEnd,
             auctionCategory=auctionCategory,
-            classificationSequence_AttributeInstanceComponent_Position= \
-                classificationSequence_AttributeInstanceComponent_Position
+            classificationSequence_AttributeInstanceComponent_Position=classificationSequence_AttributeInstanceComponent_Position,
         )
 
 
@@ -315,11 +343,14 @@ class ExplicitAllocationInformationRevenueonly(Transmission):
     #                                              )
     """
 
-    def __init__(self,
-                 contract_MarketAgreementType: MarketAgreementType,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp]
-                 ):
+    def __init__(
+        self,
+        contract_MarketAgreementType: MarketAgreementType,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+    ):
         super(ExplicitAllocationInformationRevenueonly, self).__init__(
             documentType=DocumentType.A25,
             businessType=BusinessType.B07,
@@ -327,7 +358,8 @@ class ExplicitAllocationInformationRevenueonly(Transmission):
             in_Domain=in_Domain,
             out_Domain=out_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd)
+            periodEnd=periodEnd,
+        )
 
 
 class TotalCapacityNominated(Transmission):
@@ -344,17 +376,21 @@ class TotalCapacityNominated(Transmission):
 
     """
 
-    def __init__(self,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp]
-                 ):
+    def __init__(
+        self,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+    ):
         super(TotalCapacityNominated, self).__init__(
             documentType=DocumentType.A26,
             businessType=BusinessType.B08,
             in_Domain=in_Domain,
             out_Domain=out_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd)
+            periodEnd=periodEnd,
+        )
 
 
 class TotalCapacityAlreadyAllocated(Transmission):
@@ -374,12 +410,14 @@ class TotalCapacityAlreadyAllocated(Transmission):
         Auction.Category
     """
 
-    def __init__(self,
-                 contract_MarketAgreementType: MarketAgreementType,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp],
-                 periodEnd: Union[int, str, pd.Timestamp]
-                 ):
+    def __init__(
+        self,
+        contract_MarketAgreementType: MarketAgreementType,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+    ):
         super(TotalCapacityAlreadyAllocated, self).__init__(
             documentType=DocumentType.A26,
             businessType=BusinessType.A29,
@@ -387,7 +425,8 @@ class TotalCapacityAlreadyAllocated(Transmission):
             in_Domain=in_Domain,
             out_Domain=out_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd)
+            periodEnd=periodEnd,
+        )
 
 
 class DayAheadPrices(Transmission):
@@ -403,18 +442,20 @@ class DayAheadPrices(Transmission):
     In_Domain and Out_Domain must be populated with the same area EIC code
     """
 
-    def __init__(self,
-                 in_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp],
-                 periodEnd: Union[int, str, pd.Timestamp]
-                 ):
+    def __init__(
+        self,
+        in_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+    ):
         super(DayAheadPrices, self).__init__(
             documentType=DocumentType.A44,
             in_Domain=in_Domain,
             out_Domain=in_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd)
-        assert (self.in_Domain == self.in_Domain)
+            periodEnd=periodEnd,
+        )
+        assert self.in_Domain == self.in_Domain
 
 
 class ImplicitAuctionNetPositions(Transmission):
@@ -434,11 +475,14 @@ class ImplicitAuctionNetPositions(Transmission):
     they must be populated with the same bidding zone EIC code
     """
 
-    def __init__(self,
-                 contract_MarketAgreementType: MarketAgreementType,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp]
-                 ):
+    def __init__(
+        self,
+        contract_MarketAgreementType: MarketAgreementType,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+    ):
         super(ImplicitAuctionNetPositions, self).__init__(
             documentType=DocumentType.A25,
             businessType=BusinessType.B09,
@@ -465,12 +509,13 @@ class ImplicitAuctionCongestionIncome(Transmission):
     In_Domain and Out_Domain must be populated with the same bidding zone EIC code
     """
 
-    def __init__(self,
-                 contract_MarketAgreementType: MarketAgreementType,
-                 in_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp],
-                 periodEnd: Union[int, str, pd.Timestamp]
-                 ):
+    def __init__(
+        self,
+        contract_MarketAgreementType: MarketAgreementType,
+        in_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+    ):
         super(ImplicitAuctionCongestionIncome, self).__init__(
             documentType=DocumentType.A25,
             businessType=BusinessType.B10,
@@ -480,7 +525,7 @@ class ImplicitAuctionCongestionIncome(Transmission):
             periodStart=periodStart,
             periodEnd=periodEnd,
         )
-        assert (self.in_Domain == self.out_Domain)
+        assert self.in_Domain == self.out_Domain
 
 
 class CommercialSchedules(Transmission):
@@ -498,18 +543,21 @@ class CommercialSchedules(Transmission):
         Contract Type
     """
 
-    def __init__(self,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp],
-                 contract_MarketAgreementType: MarketAgreementType
-                 ):
+    def __init__(
+        self,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+        contract_MarketAgreementType: MarketAgreementType,
+    ):
         super(CommercialSchedules, self).__init__(
             documentType=DocumentType.A09,
             in_Domain=in_Domain,
             out_Domain=out_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
-            contract_MarketAgreementType=contract_MarketAgreementType
+            contract_MarketAgreementType=contract_MarketAgreementType,
         )
 
 
@@ -527,17 +575,21 @@ class TotalCommercialSchedules(Transmission):
         Contract Type (A05)
     """
 
-    def __init__(self,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp]
-                 ):
+    def __init__(
+        self,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+    ):
         super(TotalCommercialSchedules, self).__init__(
             documentType=DocumentType.A09,
             in_Domain=in_Domain,
             out_Domain=out_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
-            contract_MarketAgreementType=MarketAgreementType.A05)
+            contract_MarketAgreementType=MarketAgreementType.A05,
+        )
 
 
 class DayAheadCommercialSchedules(Transmission):
@@ -554,17 +606,20 @@ class DayAheadCommercialSchedules(Transmission):
         Contract Type (A01)
     """
 
-    def __init__(self,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp]
-                 ):
+    def __init__(
+        self,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+    ):
         super(DayAheadCommercialSchedules, self).__init__(
             documentType=DocumentType.A09,
             in_Domain=in_Domain,
             out_Domain=out_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
-            contract_MarketAgreementType=MarketAgreementType.A01
+            contract_MarketAgreementType=MarketAgreementType.A01,
         )
 
 
@@ -581,16 +636,19 @@ class PhysicalFlows(Transmission):
     Unlike Web GUI, API responds not netted values as data is requested per direction.
     """
 
-    def __init__(self,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp]
-                 ):
+    def __init__(
+        self,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+    ):
         super(PhysicalFlows, self).__init__(
             documentType=DocumentType.A11,
             in_Domain=in_Domain,
             out_Domain=out_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd
+            periodEnd=periodEnd,
         )
 
 
@@ -611,16 +669,19 @@ class CapacityAllocatedOutsideEU(Transmission):
         ClassificationSequence_AttributeInstanceComponent.Position
     """
 
-    def __init__(self,
-                 auctionType: AuctionType,
-                 marketAgreementType: MarketAgreementType,
-                 in_Domain: Area, out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp], periodEnd: Union[int, str, pd.Timestamp],
-                 auctionCategory: AuctionCategory,
-                 classificationSequence_AttributeInstanceComponent_Position: int
-                 ):
+    def __init__(
+        self,
+        auctionType: AuctionType,
+        marketAgreementType: MarketAgreementType,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+        auctionCategory: AuctionCategory,
+        classificationSequence_AttributeInstanceComponent_Position: int,
+    ):
         super(CapacityAllocatedOutsideEU, self).__init__(
-            documentType=DocumentType('Non EU allocations'),
+            documentType=DocumentType("Non EU allocations"),
             contract_MarketAgreementType=marketAgreementType,
             auctionType=auctionType,
             in_Domain=in_Domain,
@@ -628,6 +689,5 @@ class CapacityAllocatedOutsideEU(Transmission):
             periodStart=periodStart,
             periodEnd=periodEnd,
             auctionCategory=auctionCategory,
-            classificationSequence_AttributeInstanceComponent_Position= \
-                classificationSequence_AttributeInstanceComponent_Position
+            classificationSequence_AttributeInstanceComponent_Position=classificationSequence_AttributeInstanceComponent_Position,
         )

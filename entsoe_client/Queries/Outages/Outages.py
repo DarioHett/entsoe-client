@@ -13,37 +13,38 @@ class Outages(Query):
     CTA|DE(50Hertz), CTA|DE(Amprion), CTA|DE(TeneTGer),CTA|DE(TransnetBW),CTA|AT,CTA|LU but not per bidding zone.
     """
 
-    def __init__(self,
-                 documentType: DocumentType = None,
-                 docStatus: DocStatus = None,
-                 processType: ProcessType = None,
-                 businessType: BusinessType = None,
-                 psrType: PsrType = None,
-                 type_MarketAgreementType: MarketAgreementType = None,
-                 contract_MarketAgreementType: MarketAgreementType = None,
-                 auctionType: AuctionType = None,
-                 auctionCategory: AuctionCategory = None,
-                 classificationSequence_AttributeInstanceComponent_Position: int = None,
-                 outBiddingZone_Domain: Area = None,
-                 biddingZone_Domain: Area = None,
-                 controlArea_Domain: Area = None,
-                 in_Domain: Area = None,
-                 out_Domain: Area = None,
-                 Acquiring_Domain: Area = None,
-                 Connecting_Domain: Area = None,
-                 registeredResource=None,
-                 timeInterval=None,
-                 periodStart=None,
-                 periodEnd=None,
-                 timeIntervalUpdate=None,
-                 periodStartUpdate=None,
-                 periodEndUpdate=None,
-                 update_DateAndOrTime=None,
-                 implementation_DateAndOrTime=None,  # Does not appear in Documentation; MasterData.
-                 Area_Domain=None,  # Does not appear in documentation.
-                 offset=None,
-                 mRID=None
-                 ):
+    def __init__(
+        self,
+        documentType: DocumentType = None,
+        docStatus: DocStatus = None,
+        processType: ProcessType = None,
+        businessType: BusinessType = None,
+        psrType: PsrType = None,
+        type_MarketAgreementType: MarketAgreementType = None,
+        contract_MarketAgreementType: MarketAgreementType = None,
+        auctionType: AuctionType = None,
+        auctionCategory: AuctionCategory = None,
+        classificationSequence_AttributeInstanceComponent_Position: int = None,
+        outBiddingZone_Domain: Area = None,
+        biddingZone_Domain: Area = None,
+        controlArea_Domain: Area = None,
+        in_Domain: Area = None,
+        out_Domain: Area = None,
+        Acquiring_Domain: Area = None,
+        Connecting_Domain: Area = None,
+        registeredResource=None,
+        timeInterval=None,
+        periodStart=None,
+        periodEnd=None,
+        timeIntervalUpdate=None,
+        periodStartUpdate=None,
+        periodEndUpdate=None,
+        update_DateAndOrTime=None,
+        implementation_DateAndOrTime=None,  # Does not appear in Documentation; MasterData.
+        Area_Domain=None,  # Does not appear in documentation.
+        offset=None,
+        mRID=None,
+    ):
         """
         Appendix A: Complete parameter list
         A.1.Available parameters
@@ -77,7 +78,7 @@ class Outages(Query):
             Area_Domain=Area_Domain,
             implementation_DateAndOrTime=implementation_DateAndOrTime,
             offset=offset,
-            mRID=mRID
+            mRID=mRID,
         )
 
 
@@ -93,19 +94,20 @@ class UnavailabilityOfConsumptionUnits(Outages):
     Optional parameters
         BusinessType
     """
+
     def __init__(
-            self,
-            biddingZone_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None,
-            businessType: BusinessType = None
+        self,
+        biddingZone_Domain: Area = None,
+        periodStart=None,
+        periodEnd=None,
+        businessType: BusinessType = None,
     ):
         super(UnavailabilityOfConsumptionUnits, self).__init__(
             documentType=DocumentType.A76,
             biddingZone_Domain=biddingZone_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
-            businessType=businessType
+            businessType=businessType,
         )
 
 
@@ -133,16 +135,17 @@ class UnavailabilityOfTransmissionInfrastructure(Outages):
 
     TODO: Missing Parameter: TimeIntervalUpdate or combination of PeriodStartUpdate and PeriodEndUpdate
     """
+
     def __init__(
-            self,
-            in_Domain: Area = None,
-            out_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None,
-            businessType: BusinessType = BusinessType.A53,
-            docStatus: DocStatus = None,
-            mRID: int = None,
-            offset: int = None
+        self,
+        in_Domain: Area = None,
+        out_Domain: Area = None,
+        periodStart=None,
+        periodEnd=None,
+        businessType: BusinessType = BusinessType.A53,
+        docStatus: DocStatus = None,
+        mRID: int = None,
+        offset: int = None,
     ):
         super(UnavailabilityOfTransmissionInfrastructure, self).__init__(
             documentType=DocumentType.A78,
@@ -153,7 +156,7 @@ class UnavailabilityOfTransmissionInfrastructure(Outages):
             businessType=businessType,
             docStatus=docStatus,
             mRID=mRID,
-            offset=offset
+            offset=offset,
         )
 
 
@@ -179,14 +182,15 @@ class UnavailabilityOfOffshoreGridInfrastructure(Outages):
 
     TODO: Missing Parameter: TimeIntervalUpdate or combination of PeriodStartUpdate and PeriodEndUpdate
     """
+
     def __init__(
-            self,
-            biddingZone_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None,
-            docStatus: DocStatus = None,
-            mRID: int = None,
-            offset: int = None
+        self,
+        biddingZone_Domain: Area = None,
+        periodStart=None,
+        periodEnd=None,
+        docStatus: DocStatus = None,
+        mRID: int = None,
+        offset: int = None,
     ):
         super(UnavailabilityOfOffshoreGridInfrastructure, self).__init__(
             documentType=DocumentType.A79,
@@ -195,7 +199,7 @@ class UnavailabilityOfOffshoreGridInfrastructure(Outages):
             periodEnd=periodEnd,
             docStatus=docStatus,
             mRID=mRID,
-            offset=offset
+            offset=offset,
         )
 
 
@@ -223,16 +227,17 @@ class UnavailabilityOfGenerationUnits(Outages):
 
     TODO: Missing Parameter: TimeIntervalUpdate or combination of PeriodStartUpdate and PeriodEndUpdate
     """
+
     def __init__(
-            self,
-            biddingZone_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None,
-            businessType: BusinessType = BusinessType.A53,
-            docStatus: DocStatus = None,
-            registeredResource=None,
-            mRID: int = None,
-            offset: int = None
+        self,
+        biddingZone_Domain: Area = None,
+        periodStart=None,
+        periodEnd=None,
+        businessType: BusinessType = BusinessType.A53,
+        docStatus: DocStatus = None,
+        registeredResource=None,
+        mRID: int = None,
+        offset: int = None,
     ):
         super(UnavailabilityOfGenerationUnits, self).__init__(
             documentType=DocumentType.A80,
@@ -243,7 +248,7 @@ class UnavailabilityOfGenerationUnits(Outages):
             docStatus=docStatus,
             registeredResource=registeredResource,
             mRID=mRID,
-            offset=offset
+            offset=offset,
         )
 
 
@@ -271,16 +276,17 @@ class UnavailabilityOfProductionUnits(Outages):
 
     TODO: Missing Parameter: TimeIntervalUpdate or combination of PeriodStartUpdate and PeriodEndUpdate
     """
+
     def __init__(
-            self,
-            biddingZone_Domain: Area = None,
-            periodStart=None,
-            periodEnd=None,
-            businessType: BusinessType = BusinessType.A53,
-            docStatus: DocStatus = None,
-            registeredResource=None,
-            mRID: int = None,
-            offset: int = None
+        self,
+        biddingZone_Domain: Area = None,
+        periodStart=None,
+        periodEnd=None,
+        businessType: BusinessType = BusinessType.A53,
+        docStatus: DocStatus = None,
+        registeredResource=None,
+        mRID: int = None,
+        offset: int = None,
     ):
         super(UnavailabilityOfProductionUnits, self).__init__(
             documentType=DocumentType.A77,
@@ -291,6 +297,5 @@ class UnavailabilityOfProductionUnits(Outages):
             docStatus=docStatus,
             registeredResource=registeredResource,
             mRID=mRID,
-            offset=offset
+            offset=offset,
         )
-

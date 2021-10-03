@@ -16,7 +16,9 @@ import pandas as pd
 from lxml import etree
 
 
-def unfold_node(node: etree._Element) -> tuple[str, dict[str, dict[str,]]]:
+def unfold_node(
+    node: etree._Element,
+) -> tuple[str, dict[str, dict[str,]]]:
     """
     Recursive unfolding of a node into a dict.
     TODO: Ensure no overwriting of same dict-names in the unfolding.
@@ -32,13 +34,14 @@ def unfold_node(node: etree._Element) -> tuple[str, dict[str, dict[str,]]]:
 def decompose_node(node: etree._Element, subnode_tag) -> tuple[dict, list]:
     """node -> [subnodes], {metadata}"""
     if not subnode_tag:
-        data_nodes: list = node.xpath(f'./*')
-        data: dict = {node.tag.partition('}')[2]: dict(map(unfold_node, data_nodes))}
+        data_nodes: list = node.xpath(f"./*")
+        data: dict = {node.tag.partition("}")[2]: dict(map(unfold_node, data_nodes))}
         return {}, [data]
     if isinstance(subnode_tag, str):
         subnodes: list = node.findall(f"./{subnode_tag}", node.nsmap)
-        metadata_nodes: list = node.xpath(f'./*[not(self::{subnode_tag})]',
-                                          namespaces=node.nsmap)
+        metadata_nodes: list = node.xpath(
+            f"./*[not(self::{subnode_tag})]", namespaces=node.nsmap
+        )
         metadata: dict = {node.tag: dict(map(unfold_node, metadata_nodes))}
         return metadata, subnodes
     if isinstance(subnode_tag, list):
@@ -71,8 +74,9 @@ def Period_to_DataFrame_fn(get_Period_data: Callable) -> Callable:
         assert len(data) == len(index)
         df = pd.DataFrame(data=data, index=index)
 
-        metadata_nodes: list = Period.xpath(f'./*[not(self::Point)]',
-                                            namespaces=Period.nsmap)
+        metadata_nodes: list = Period.xpath(
+            f"./*[not(self::Point)]", namespaces=Period.nsmap
+        )
         metadata: dict = {Period.tag: dict(map(unfold_node, metadata_nodes))}
         meta_dict = pd.json_normalize(metadata).iloc[0].to_dict()
         df = df.assign(**meta_dict)
@@ -94,20 +98,23 @@ def get_Period_index(Period: etree._Element) -> pd.Index:
 # Maps response_xml resolutions to
 # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Timedelta.html#pandas.Timedelta
 resolution_map: Dict = {
-    'P1Y': '12M',
-    'P1M': '1M',
-    'P7D': '7D',
-    'P1D': '1D',
-    'PT60M': '60min',
-    'PT30M': '30min',
-    'PT15M': '15min',
-    'PT1M': '1min'
+    "P1Y": "12M",
+    "P1M": "1M",
+    "P7D": "7D",
+    "P1D": "1D",
+    "PT60M": "60min",
+    "PT30M": "30min",
+    "PT15M": "15min",
+    "PT1M": "1min",
 }
 
 
 def get_Period_data(Period: etree._Element) -> List[Dict]:
-    points = Period.xpath('./Point', namespaces=Period.nsmap)
-    data = [dict([(datum.tag, datum.text) for datum in point.iterchildren()]) for point in points]
+    points = Period.xpath("./Point", namespaces=Period.nsmap)
+    data = [
+        dict([(datum.tag, datum.text) for datum in point.iterchildren()])
+        for point in points
+    ]
     return data
 
 
@@ -115,7 +122,7 @@ def get_Period_Financial_Price_data(Period: etree._Element) -> List[Dict]:
     """
     TODO: Could be abstracted into `get_Period_data.
     """
-    points = Period.xpath('./Point', namespaces=Period.nsmap)
+    points = Period.xpath("./Point", namespaces=Period.nsmap)
     data = [get_Point_Financial_Price_data(point) for point in points]
     return data
 
@@ -127,13 +134,13 @@ def get_Point_Financial_Price_data(Point: etree._Element) -> Dict:
 
     Applicable at e.g. FinancialExpensesAndIncomeForBalancing
     """
-    direction_map = {"A01": "up",
-                     "A02": "down",
-                     "A03": "up_and_down"}
+    direction_map = {"A01": "up", "A02": "down", "A03": "up_and_down"}
 
     datum = {Point.position.tag: Point.position.text}
     for fp in Point.Financial_Price:
-        datum['.'.join([fp.tag, direction_map[fp.direction.text], fp.amount.tag])] = fp.amount.text
+        datum[
+            ".".join([fp.tag, direction_map[fp.direction.text], fp.amount.tag])
+        ] = fp.amount.text
 
     return datum
 

@@ -7,16 +7,13 @@ import entsoe_client.Parsers.TransmissionNetwork_MarketDocument_Parser
 
 
 class test_TransmissionNetwork_MarketDocument_Parser(unittest.TestCase):
-
-
     @classmethod
     def setUpClass(cls) -> None:
         cls.response_contents: dict = {}
         path = "./tests/data/TransmissionNetwork_MarketDocument/"
         for file in os.listdir(path):
-            with open(path+file, "rb") as data:
+            with open(path + file, "rb") as data:
                 cls.response_contents[file] = data.read()
-
 
     def test_dataloading(self):
         self.assertIsInstance(self.response_contents, dict)
@@ -26,15 +23,17 @@ class test_TransmissionNetwork_MarketDocument_Parser(unittest.TestCase):
                 values = list(self.response_contents.values())
                 self.assertIsInstance(values[i], bytes)
 
-
     def test_factory_choice(self):
         types = ["A90"]
         for i in range(len(types)):
             with self.subTest(i=i):
-                parser = ParserFactory.get_parser("TransmissionNetwork_MarketDocument", types[i])
-                self.assertIsInstance(parser,
-                                      entsoe_client.Parsers.TransmissionNetwork_MarketDocument_Parser.TransmissionNetwork_MarketDocument_Parser)
-
+                parser = ParserFactory.get_parser(
+                    "TransmissionNetwork_MarketDocument", types[i]
+                )
+                self.assertIsInstance(
+                    parser,
+                    entsoe_client.Parsers.TransmissionNetwork_MarketDocument_Parser.TransmissionNetwork_MarketDocument_Parser,
+                )
 
     def test_parse_basic(self):
         """Basic AmountOfBalancingReservesUnderContract Query."""
@@ -44,13 +43,12 @@ class test_TransmissionNetwork_MarketDocument_Parser(unittest.TestCase):
         df = parser.parse(values[0])
         self.assertIsInstance(df, pd.DataFrame)
 
-
     def test_parse_all(self):
-        for file,content in self.response_contents.items():
+        for file, content in self.response_contents.items():
             parser = XMLParser()
             df = parser.parse(content)
             self.assertIsInstance(df, pd.DataFrame)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -9,14 +9,15 @@ from entsoe_client.Queries import Query
 class Congestion(Query):
     """4.3 Congestion domain."""
 
-    def __init__(self,
-                 documentType: DocumentType = None,
-                 businessType: BusinessType = None,
-                 in_Domain: Area = None,
-                 out_Domain: Area = None,
-                 periodStart: Union[str, int, pd.Timestamp] = None,
-                 periodEnd: Union[str, int, pd.Timestamp] = None,
-                 ):
+    def __init__(
+        self,
+        documentType: DocumentType = None,
+        businessType: BusinessType = None,
+        in_Domain: Area = None,
+        out_Domain: Area = None,
+        periodStart: Union[str, int, pd.Timestamp] = None,
+        periodEnd: Union[str, int, pd.Timestamp] = None,
+    ):
         super(Congestion, self).__init__(
             documentType=documentType,
             businessType=businessType,
@@ -41,18 +42,21 @@ class Redispatching(Congestion):
         BusinessType
     """
 
-    def __init__(self,
-                 in_Domain: Area,
-                 out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp],
-                 periodEnd: Union[int, str, pd.Timestamp]):
+    def __init__(
+        self,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+    ):
         super(Redispatching, self).__init__(
             documentType=DocumentType.A63,
             businessType=BusinessType.A46,
-            in_Domain = in_Domain,
-            out_Domain = out_Domain,
+            in_Domain=in_Domain,
+            out_Domain=out_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd)
+            periodEnd=periodEnd,
+        )
 
 
 class Countertrading(Congestion):
@@ -67,19 +71,22 @@ class Countertrading(Congestion):
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
 
-    def __init__(self,
-                 in_Domain: Area,
-                 out_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp],
-                 periodEnd: Union[int, str, pd.Timestamp]):
+    def __init__(
+        self,
+        in_Domain: Area,
+        out_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+    ):
         super(Countertrading, self).__init__(
-            documentType=DocumentType('Counter trade notice'),
-            in_Domain = in_Domain,
-            out_Domain = out_Domain,
+            documentType=DocumentType("Counter trade notice"),
+            in_Domain=in_Domain,
+            out_Domain=out_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd)
+            periodEnd=periodEnd,
+        )
 
-        
+
 class CostsOfCongestionManagement(Congestion):
     """
     4.3.3. Costs of Congestion Management [13.1.C]
@@ -95,14 +102,17 @@ class CostsOfCongestionManagement(Congestion):
     In_Domain and Out_Domain must be populated with the same area EIC code.
     """
 
-    def __init__(self,
-                 in_Domain: Area,
-                 periodStart: Union[int, str, pd.Timestamp],
-                 periodEnd: Union[int, str, pd.Timestamp]):
+    def __init__(
+        self,
+        in_Domain: Area,
+        periodStart: Union[int, str, pd.Timestamp],
+        periodEnd: Union[int, str, pd.Timestamp],
+    ):
         super(CostsOfCongestionManagement, self).__init__(
             documentType=DocumentType.A92,
             businessType=BusinessType.B03,
             in_Domain=in_Domain,
             out_Domain=in_Domain,
             periodStart=periodStart,
-            periodEnd=periodEnd)
+            periodEnd=periodEnd,
+        )
