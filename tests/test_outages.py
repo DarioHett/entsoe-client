@@ -21,26 +21,26 @@ class IntegrationTest(unittest.TestCase):
             #         periodEnd = 202108250000
             # ),
             Outages.UnavailabilityOfGenerationUnits(
-                    biddingZone_Domain=Area.FR,
-                    periodStart=202108240000,
-                    periodEnd = 202108250000
+                biddingZone_Domain=Area.FR,
+                periodStart=202108240000,
+                periodEnd=202108250000,
             ),
             Outages.UnavailabilityOfProductionUnits(
                 biddingZone_Domain=Area.FR,
                 periodStart=202108240000,
-                periodEnd = 202108250000
+                periodEnd=202108250000,
             ),
             Outages.UnavailabilityOfOffshoreGridInfrastructure(
                 biddingZone_Domain=Area.DE_TENNET,
                 periodStart=202108010000,
-                periodEnd = 202108250000
+                periodEnd=202108250000,
             ),
             Outages.UnavailabilityOfTransmissionInfrastructure(
                 in_Domain=Area.DE_50HZ,
                 out_Domain=Area.PL_CZ,
                 periodStart=202108010000,
-                periodEnd=202108250000
-            )
+                periodEnd=202108250000,
+            ),
         ]
 
     def test_integration(self):
@@ -67,6 +67,6 @@ class IntegrationTest(unittest.TestCase):
                 self.assertIsInstance(df, DataFrame)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     unittest.main(verbosity=101)

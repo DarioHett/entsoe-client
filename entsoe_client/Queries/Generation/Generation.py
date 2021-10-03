@@ -4,7 +4,6 @@ from typing import Union
 import pandas as pd
 
 
-
 class Generation(Query):
     """
     4.4. Generation domain
@@ -14,23 +13,24 @@ class Generation(Query):
     If the parameter is used, data will be returned only for the specific production document_type requested.
     """
 
-    def __init__(self,
-                 documentType: DocumentType = None,
-                 docStatus: DocStatus = None,
-                 auctionType: AuctionType = None,
-                 businessType: BusinessType = None,
-                 contract_MarketAgreementType: MarketAgreementType = None,
-                 in_Domain: Area = None,
-                 out_Domain: Area = None,
-                 periodStart: Union[str, int, pd.Timestamp] = None,
-                 periodEnd: Union[str, int, pd.Timestamp] = None,
-                 processType: ProcessType = None,
-                 psrType: PsrType = None,
-                 auctionCategory: AuctionCategory = None,
-                 update_DateAndOrTime=None,
-                 classificationSequence_AttributeInstanceComponent_Position: int = None,
-                 registeredResource=None
-                 ):
+    def __init__(
+        self,
+        documentType: DocumentType = None,
+        docStatus: DocStatus = None,
+        auctionType: AuctionType = None,
+        businessType: BusinessType = None,
+        contract_MarketAgreementType: MarketAgreementType = None,
+        in_Domain: Area = None,
+        out_Domain: Area = None,
+        periodStart: Union[str, int, pd.Timestamp] = None,
+        periodEnd: Union[str, int, pd.Timestamp] = None,
+        processType: ProcessType = None,
+        psrType: PsrType = None,
+        auctionCategory: AuctionCategory = None,
+        update_DateAndOrTime=None,
+        classificationSequence_AttributeInstanceComponent_Position: int = None,
+        registeredResource=None,
+    ):
         super(Generation, self).__init__(
             documentType=documentType,
             docStatus=docStatus,
@@ -45,9 +45,8 @@ class Generation(Query):
             psrType=psrType,
             auctionCategory=auctionCategory,
             update_DateAndOrTime=update_DateAndOrTime,
-            classificationSequence_AttributeInstanceComponent_Position= \
-                classificationSequence_AttributeInstanceComponent_Position,
-            registeredResource=registeredResource
+            classificationSequence_AttributeInstanceComponent_Position=classificationSequence_AttributeInstanceComponent_Position,
+            registeredResource=registeredResource,
         )
 
     def __call__(self):
@@ -68,20 +67,21 @@ class InstalledGenerationCapacityAggregated(Generation):
         PsrType (When used, only queried production document_type is returned)
     """
 
-    def __init__(self,
-                 processType: ProcessType = ProcessType.A33,
-                 in_Domain: Area = None,
-                 periodStart: Union[str, int, pd.Timestamp] = None,
-                 periodEnd: Union[str, int, pd.Timestamp] = None,
-                 psrType: PsrType = None
-                 ):
+    def __init__(
+        self,
+        processType: ProcessType = ProcessType.A33,
+        in_Domain: Area = None,
+        periodStart: Union[str, int, pd.Timestamp] = None,
+        periodEnd: Union[str, int, pd.Timestamp] = None,
+        psrType: PsrType = None,
+    ):
         super(InstalledGenerationCapacityAggregated, self).__init__(
             documentType=DocumentType.A68,
             processType=processType,
             in_Domain=in_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
-            psrType=psrType
+            psrType=psrType,
         )
 
 
@@ -99,20 +99,21 @@ class InstalledGenerationCapacityPerUnit(Generation):
         PsrType (When used, only queried production document_type is returned)
     """
 
-    def __init__(self,
-                 processType: ProcessType = ProcessType.A33,
-                 in_Domain: Area = None,
-                 periodStart: Union[str, int, pd.Timestamp] = None,
-                 periodEnd: Union[str, int, pd.Timestamp] = None,
-                 psrType: PsrType = None
-                 ):
+    def __init__(
+        self,
+        processType: ProcessType = ProcessType.A33,
+        in_Domain: Area = None,
+        periodStart: Union[str, int, pd.Timestamp] = None,
+        periodEnd: Union[str, int, pd.Timestamp] = None,
+        psrType: PsrType = None,
+    ):
         super(InstalledGenerationCapacityPerUnit, self).__init__(
             documentType=DocumentType.A71,
             processType=processType,
             in_Domain=in_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
-            psrType=psrType
+            psrType=psrType,
         )
 
 
@@ -128,19 +129,20 @@ class DayAheadAggregatedGeneration(Generation):
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
 
-    def __init__(self,
-                 in_Domain: Area = None,
-                 periodStart: Union[str, int, pd.Timestamp] = None,
-                 periodEnd: Union[str, int, pd.Timestamp] = None,
-                 psrType: PsrType = None
-                 ):
+    def __init__(
+        self,
+        in_Domain: Area = None,
+        periodStart: Union[str, int, pd.Timestamp] = None,
+        periodEnd: Union[str, int, pd.Timestamp] = None,
+        psrType: PsrType = None,
+    ):
         super(DayAheadAggregatedGeneration, self).__init__(
             documentType=DocumentType.A71,
             processType=ProcessType.A01,
             in_Domain=in_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
-            psrType=psrType
+            psrType=psrType,
         )
 
 
@@ -158,19 +160,20 @@ class DayAheadGenerationForecastsWindSolar(Generation):
             PsrType (When used, only queried production document_type is returned)
     """
 
-    def __init__(self,
-                 in_Domain: Area = None,
-                 periodStart: Union[str, int, pd.Timestamp] = None,
-                 periodEnd: Union[str, int, pd.Timestamp] = None,
-                 psrType: PsrType = None
-                 ):
+    def __init__(
+        self,
+        in_Domain: Area = None,
+        periodStart: Union[str, int, pd.Timestamp] = None,
+        periodEnd: Union[str, int, pd.Timestamp] = None,
+        psrType: PsrType = None,
+    ):
         super(DayAheadGenerationForecastsWindSolar, self).__init__(
             documentType=DocumentType.A69,
             processType=ProcessType.A01,
             in_Domain=in_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
-            psrType=psrType
+            psrType=psrType,
         )
 
 
@@ -188,19 +191,20 @@ class CurrentGenerationForecastsWindSolar(Generation):
         PsrType (When used, only queried production document_type is returned)
     """
 
-    def __init__(self,
-                 in_Domain: Area = None,
-                 periodStart: Union[str, int, pd.Timestamp] = None,
-                 periodEnd: Union[str, int, pd.Timestamp] = None,
-                 psrType: PsrType = None
-                 ):
+    def __init__(
+        self,
+        in_Domain: Area = None,
+        periodStart: Union[str, int, pd.Timestamp] = None,
+        periodEnd: Union[str, int, pd.Timestamp] = None,
+        psrType: PsrType = None,
+    ):
         super(CurrentGenerationForecastsWindSolar, self).__init__(
             documentType=DocumentType.A69,
             processType=ProcessType.A18,
             in_Domain=in_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
-            psrType=psrType
+            psrType=psrType,
         )
 
 
@@ -218,19 +222,20 @@ class IntradayGenerationForecastsWindSolar(Generation):
         PsrType (When used, only queried production document_type is returned)
     """
 
-    def __init__(self,
-                 in_Domain: Area = None,
-                 periodStart: Union[str, int, pd.Timestamp] = None,
-                 periodEnd: Union[str, int, pd.Timestamp] = None,
-                 psrType: PsrType = None
-                 ):
+    def __init__(
+        self,
+        in_Domain: Area = None,
+        periodStart: Union[str, int, pd.Timestamp] = None,
+        periodEnd: Union[str, int, pd.Timestamp] = None,
+        psrType: PsrType = None,
+    ):
         super(IntradayGenerationForecastsWindSolar, self).__init__(
             documentType=DocumentType.A69,
             processType=ProcessType.A40,
             in_Domain=in_Domain,
             periodStart=periodStart,
             periodEnd=periodEnd,
-            psrType=psrType
+            psrType=psrType,
         )
 
 
@@ -249,14 +254,15 @@ class ActualGenerationOutputPerGenerationUnit(Generation):
         RegisteredResource (EIC of Generation Unit)
     """
 
-    def __init__(self,
-                 processType: ProcessType = ProcessType.A16,
-                 in_Domain: Area = None,
-                 periodStart: Union[str, int, pd.Timestamp] = None,
-                 periodEnd: Union[str, int, pd.Timestamp] = None,
-                 psrType: PsrType = None,
-                 registeredResource=None
-                 ):
+    def __init__(
+        self,
+        processType: ProcessType = ProcessType.A16,
+        in_Domain: Area = None,
+        periodStart: Union[str, int, pd.Timestamp] = None,
+        periodEnd: Union[str, int, pd.Timestamp] = None,
+        psrType: PsrType = None,
+        registeredResource=None,
+    ):
         super(ActualGenerationOutputPerGenerationUnit, self).__init__(
             documentType=DocumentType.A73,
             processType=processType,
@@ -264,7 +270,7 @@ class ActualGenerationOutputPerGenerationUnit(Generation):
             periodStart=periodStart,
             periodEnd=periodEnd,
             psrType=psrType,
-            registeredResource=registeredResource
+            registeredResource=registeredResource,
         )
 
 
@@ -287,13 +293,14 @@ class AggregatedGenerationPerType(Generation):
     while outBiddingZone_Domain reflects Consumption values.
     """
 
-    def __init__(self,
-                 processType: ProcessType = ProcessType.A16,
-                 in_Domain: Area = None,
-                 periodStart: Union[str, int, pd.Timestamp] = None,
-                 periodEnd: Union[str, int, pd.Timestamp] = None,
-                 psrType: PsrType = None,
-                 ):
+    def __init__(
+        self,
+        processType: ProcessType = ProcessType.A16,
+        in_Domain: Area = None,
+        periodStart: Union[str, int, pd.Timestamp] = None,
+        periodEnd: Union[str, int, pd.Timestamp] = None,
+        psrType: PsrType = None,
+    ):
         super(AggregatedGenerationPerType, self).__init__(
             documentType=DocumentType.A75,
             processType=processType,
@@ -316,13 +323,16 @@ class AggregatedFillingRateOfWaterReservoirsAndHydroStoragePlants(Generation):
         TimeInterval or combination of PeriodStart and PeriodEnd
     """
 
-    def __init__(self,
-                 in_Domain: Area = None,
-                 processType: ProcessType = ProcessType.A16,
-                 periodStart: Union[str, int, pd.Timestamp] = None,
-                 periodEnd: Union[str, int, pd.Timestamp] = None,
-                 ):
-        super(AggregatedFillingRateOfWaterReservoirsAndHydroStoragePlants, self).__init__(
+    def __init__(
+        self,
+        in_Domain: Area = None,
+        processType: ProcessType = ProcessType.A16,
+        periodStart: Union[str, int, pd.Timestamp] = None,
+        periodEnd: Union[str, int, pd.Timestamp] = None,
+    ):
+        super(
+            AggregatedFillingRateOfWaterReservoirsAndHydroStoragePlants, self
+        ).__init__(
             documentType=DocumentType.A72,
             processType=processType,
             in_Domain=in_Domain,

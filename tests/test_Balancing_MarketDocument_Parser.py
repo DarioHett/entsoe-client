@@ -7,16 +7,13 @@ import os
 
 
 class test_Balancing_MarketDocument_Parser(unittest.TestCase):
-
-
     @classmethod
     def setUpClass(cls) -> None:
         cls.response_contents: dict = {}
         path = "./tests/data/Balancing_MarketDocument/"
         for file in os.listdir(path):
-            with open(path+file, "rb") as data:
+            with open(path + file, "rb") as data:
                 cls.response_contents[file] = data.read()
-
 
     def test_dataloading(self):
         self.assertIsInstance(self.response_contents, dict)
@@ -26,15 +23,15 @@ class test_Balancing_MarketDocument_Parser(unittest.TestCase):
                 values = list(self.response_contents.values())
                 self.assertIsInstance(values[i], bytes)
 
-
     def test_factory_choice(self):
         types = ["A81"]
         for i in range(len(types)):
             with self.subTest(i=i):
                 parser = ParserFactory.get_parser("Balancing_MarketDocument", types[i])
-                self.assertIsInstance(parser,
-                                      entsoe_client.Parsers.Balacing_MarketDocument_Parser.Balancing_MarketDocument_Parser)
-
+                self.assertIsInstance(
+                    parser,
+                    entsoe_client.Parsers.Balacing_MarketDocument_Parser.Balancing_MarketDocument_Parser,
+                )
 
     def test_parse_basic(self):
         """Basic AmountOfBalancingReservesUnderContract Query."""
@@ -44,12 +41,11 @@ class test_Balancing_MarketDocument_Parser(unittest.TestCase):
         df = parser.parse(values[0])
         self.assertIsInstance(df, pd.DataFrame)
 
-
     def test_parse_all(self):
-        for file,content in self.response_contents.items():
-            if file[-3:] == 'zip':
+        for file, content in self.response_contents.items():
+            if file[-3:] == "zip":
                 parser = ZipParser()
-            elif file[-3:] == 'xml':
+            elif file[-3:] == "xml":
                 parser = XMLParser()
             else:
                 raise TypeError
@@ -57,5 +53,5 @@ class test_Balancing_MarketDocument_Parser(unittest.TestCase):
             self.assertIsInstance(df, pd.DataFrame)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

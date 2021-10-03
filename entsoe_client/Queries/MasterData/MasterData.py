@@ -7,24 +7,25 @@ from entsoe_client.Queries import Query
 class MasterData(Query):
     """4.3 Congestion domain."""
 
-    def __init__(self,
-                 documentType: DocumentType = None,
-                 docStatus: DocStatus = None,
-                 auctionType: AuctionType = None,
-                 businessType: BusinessType = None,
-                 psrType: PsrType = None,
-                 contract_MarketAgreementType: MarketAgreementType = None,
-                 in_Domain: Area = None,
-                 out_Domain: Area = None,
-                 periodStart: Union[str, int, pd.Timestamp] = None,
-                 periodEnd: Union[str, int, pd.Timestamp] = None,
-                 processType: ProcessType = None,
-                 auctionCategory: AuctionCategory = None,
-                 update_DateAndOrTime=None,
-                 biddingZone_Domain=None,
-                 implementation_DateAndOrTime: str = None,
-                 classificationSequence_AttributeInstanceComponent_Position: int = None
-                 ):
+    def __init__(
+        self,
+        documentType: DocumentType = None,
+        docStatus: DocStatus = None,
+        auctionType: AuctionType = None,
+        businessType: BusinessType = None,
+        psrType: PsrType = None,
+        contract_MarketAgreementType: MarketAgreementType = None,
+        in_Domain: Area = None,
+        out_Domain: Area = None,
+        periodStart: Union[str, int, pd.Timestamp] = None,
+        periodEnd: Union[str, int, pd.Timestamp] = None,
+        processType: ProcessType = None,
+        auctionCategory: AuctionCategory = None,
+        update_DateAndOrTime=None,
+        biddingZone_Domain=None,
+        implementation_DateAndOrTime: str = None,
+        classificationSequence_AttributeInstanceComponent_Position: int = None,
+    ):
         super(MasterData, self).__init__(
             documentType=documentType,
             docStatus=docStatus,
@@ -41,8 +42,7 @@ class MasterData(Query):
             auctionCategory=auctionCategory,
             update_DateAndOrTime=update_DateAndOrTime,
             implementation_DateAndOrTime=implementation_DateAndOrTime,
-            classificationSequence_AttributeInstanceComponent_Position= \
-                classificationSequence_AttributeInstanceComponent_Position
+            classificationSequence_AttributeInstanceComponent_Position=classificationSequence_AttributeInstanceComponent_Position,
         )
 
 
@@ -60,15 +60,16 @@ class ProductionAndGenerationUnits(MasterData):
         PsrType
     """
 
-    def __init__(self,
-                 biddingZone_Domain: Area = None,
-                 psrType: PsrType = None,
-                 implementation_DateAndOrTime: str = None
-                 ):
+    def __init__(
+        self,
+        biddingZone_Domain: Area = None,
+        psrType: PsrType = None,
+        implementation_DateAndOrTime: str = None,
+    ):
         super(ProductionAndGenerationUnits, self).__init__(
             documentType=DocumentType.A95,
             businessType=BusinessType.B11,
             biddingZone_Domain=biddingZone_Domain,
             psrType=psrType,
-            implementation_DateAndOrTime=implementation_DateAndOrTime
+            implementation_DateAndOrTime=implementation_DateAndOrTime,
         )
