@@ -1,11 +1,10 @@
-from typing import List
-
-from lxml import etree, objectify
-import requests
-import pandas as pd
-
 from io import BytesIO
+from typing import List
 from zipfile import ZipFile
+
+import pandas as pd
+import requests
+from lxml import etree, objectify
 
 from entsoe_client.Parsers.Balacing_MarketDocument_Parser import Balancing_MarketDocument_Parser, \
     Balancing_MarketDocument_FinancialExpensesAndIncomeForBalancing_Parser
@@ -29,6 +28,9 @@ class Parser:
         df = parser.parse(content)
         return df
 
+    def __call__(self, response: requests.Response):
+        return self.parse(response)
+
 
 class ZipParser:
     @staticmethod
@@ -37,9 +39,7 @@ class ZipParser:
         xml_document_list = [archive.read(file) for file in archive.infolist()]
         return xml_document_list
 
-    # May change later to handle `Requests.response` types directly.
     def parse(self, zip_archive: bytes):
-        # TODO: Now can only handle XML input; reshuffle later to handle other input (e.g. ZIP built from XML).
         parser = XMLParser()
         xml_documents = self.unpack_archive(zip_archive)
         dfs = [parser.parse(xml_document) for xml_document in xml_documents]
@@ -56,9 +56,7 @@ class XMLParser:
         etree.cleanup_namespaces(objectified_xml)
         return objectified_xml
 
-    # May change later to handle `Requests.response` types directly.
     def parse(self, xml_document: bytes):
-        # TODO: Now can only handle XML input; reshuffle later to handle other input (e.g. ZIP built from XML).
         object_content = self.deserialize_xml(xml_document)
         parser = factory.get_parser(object_content.tag, object_content.type.text)
         parser.set_objectified_input_xml(object_content)

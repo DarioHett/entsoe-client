@@ -38,6 +38,5 @@ class GL_MarketDocument_Parser(Abstract_GL_MarketDocument_Parser):
         self.set_TimeSeries_Parser(utils.Tree_to_DataFrame(self.Series_Period_Parser, 'Period'))
         self.set_Document_Parser(utils.Tree_to_DataFrame(self.TimeSeries_Parser, 'TimeSeries'))
 
-
     def parse(self):
         return self.Document_Parser(self.objectified_input_xml)

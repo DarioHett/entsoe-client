@@ -9,5 +9,5 @@ class MarketAgreementType(str, ParameterEnum):
     A05 = 'Total',
     A06 = 'Long term',
     A07 = 'Intraday',
-    A13 = 'Hourly'  # TODO: Type_MarketAgreement.Type only
+    A13 = 'Hourly'
 
