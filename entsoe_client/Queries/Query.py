@@ -1,5 +1,8 @@
+import pandas as pd
+
 from entsoe_client.ParameterTypes import *
-from typing import Dict, Any
+from typing import Dict, Any, Union
+from pandas import Timestamp
 
 
 class Query:
@@ -65,8 +68,8 @@ class Query:
         self.Connecting_Domain = Connecting_Domain
         self.registeredResource = registeredResource
         self.timeInterval = timeInterval
-        self.periodStart = periodStart
-        self.periodEnd = periodEnd
+        self.periodStart = self.datetime_parser(periodStart)
+        self.periodEnd = self.datetime_parser(periodEnd)
         self.timeIntervalUpdate = timeIntervalUpdate
         self.periodStartUpdate = periodStartUpdate
         self.periodEndUpdate = periodEndUpdate
@@ -75,6 +78,19 @@ class Query:
         self.implementation_DateAndOrTime = implementation_DateAndOrTime
         self.offset = offset
         self.mRID = mRID
+
+    @staticmethod
+    def datetime_parser(dateformat: Union[str, int, Timestamp]) -> int:
+        fmt = "%Y%m%d%H%M"
+        if isinstance(dateformat, Timestamp):
+            return int(dateformat.strftime(fmt))
+        if isinstance(dateformat, str):
+            new_dateformat: Timestamp = pd.to_datetime(
+                dateformat, infer_datetime_format=True, utc=True
+            )
+            return Query.datetime_parser(new_dateformat)
+        if isinstance(dateformat, int):
+            return dateformat
 
     def __call__(self) -> Dict:
         _ = self.__dict__
