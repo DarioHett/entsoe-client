@@ -2,6 +2,102 @@
 ENTSO-E Client
 ===============
 
+Formulate readable queries and handle data in Pandas,
+including an exhaustive set of pre-defined queries.
+
+.. code-block:: python
+
+    >>> import requests
+    >>> from lxml import objectify
+    >>> from lxml.etree import dump
+    >>> url = 'https://transparency.entsoe.eu/api?' \
+    ...       'documentType=A81&businessType=A95&psrType=A04&type_MarketAgreement.Type=A01&controlArea_Domain=10YNL----------L' \
+    ...       f'&periodStart=202101010000&periodEnd=202104010000&securityToken={api_key}'
+    >>> response = requests.Session().get(url=url)
+    >>> element = objectify.fromstring(response.content)
+    >>> dump(element)
+    <Balancing_MarketDocument xmlns="urn:iec62325.351:tc57wg16:451-6:balancingdocument:3:0">
+      <mRID>051b91beed574b48b4548214e9001afc</mRID>
+      <revisionNumber>1</revisionNumber>
+      <type>A81</type>
+      <process.processType>A34</process.processType>
+      <sender_MarketParticipant.mRID codingScheme="A01">10X1001A1001A450</sender_MarketParticipant.mRID>
+      <sender_MarketParticipant.marketRole.type>A32</sender_MarketParticipant.marketRole.type>
+      <receiver_MarketParticipant.mRID codingScheme="A01">10X1001A1001A450</receiver_MarketParticipant.mRID>
+      <receiver_MarketParticipant.marketRole.type>A33</receiver_MarketParticipant.marketRole.type>
+      <createdDateTime>2021-10-04T18:12:43Z</createdDateTime>
+      <controlArea_Domain.mRID codingScheme="A01">10YNL----------L</controlArea_Domain.mRID>
+      <period.timeInterval>
+        <start>2020-12-31T23:00Z</start>
+        <end>2021-03-31T22:00Z</end>
+      </period.timeInterval>
+      <TimeSeries>
+        <mRID>1</mRID>
+        <businessType>A95</businessType>
+        <type_MarketAgreement.type>A01</type_MarketAgreement.type>
+        <mktPSRType.psrType>A04</mktPSRType.psrType>
+        <flowDirection.direction>A03</flowDirection.direction>
+        <quantity_Measure_Unit.name>MAW</quantity_Measure_Unit.name>
+        <curveType>A01</curveType>
+        <Period>
+          <timeInterval>
+            <start>2020-12-31T23:00Z</start>
+            <end>2021-01-01T23:00Z</end>
+          </timeInterval>
+          <resolution>PT60M</resolution>
+          <Point>
+            <position>1</position>
+            <quantity>44</quantity>
+          </Point>
+          <Point>
+            <position>2</position>
+            <quantity>44</quantity>
+    [...]
+
+becomes
+
+.. code-block:: python
+
+    >>> import entsoe_client as ec
+    >>> from entsoe_client.ParameterTypes import *
+    >>> client = ec.Client(api_key)
+    >>> parser = ec.Parser
+    >>> query = ec.Query(
+    ...     documentType=DocumentType("Contracted reserves"),
+    ...     psrType=PsrType("Generation"),
+    ...     businessType=BusinessType("Frequency containment reserve"),
+    ...     controlArea_Domain=Area("NL"),
+    ...     type_MarketAgreementType=MarketAgreementType("Daily"),
+    ...     periodStart="2021-01-01T00:00",
+    ...     periodEnd="2021-04-01T00:00"
+    ... )
+    >>> response = client(query)
+    >>> df = parser.parse(response)
+    >>> df.iloc[:,:3].head()
+                              position quantity Period.timeInterval.start...
+    2020-12-31 23:00:00+00:00        1       44         2020-12-31T23:00Z
+    2021-01-01 00:00:00+00:00        2       44         2020-12-31T23:00Z
+    2021-01-01 01:00:00+00:00        3       44         2020-12-31T23:00Z
+    2021-01-01 02:00:00+00:00        4       44         2020-12-31T23:00Z
+    2021-01-01 03:00:00+00:00        5       44         2020-12-31T23:00Z
+    ...
+
+
+predefined queries are subset of the generic Query class, covering all examples of the `ENTSO-E API guide <https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api/Guide.html>`_.
+
+.. code-block:: python
+
+    >>> predefined_query = ec.Queries.Balancing.AmountOfBalancingReservesUnderContract(
+    ...     controlArea_Domain=Area("NL"),
+    ...     type_MarketAgreementType=MarketAgreementType("Daily"),
+    ...     psrType=PsrType("Generation"),
+    ...     periodStart="2021-01-01T00:00",
+    ...     periodEnd="2021-04-01T00:00"
+    ... )
+    ...
+    >>> predefined_query() == query()
+    True
+-----
 
 | *ENTSO-E Client* enables straight-forward access to *all* of the data at `ENTSO-E Transparency Platform <https://transparency.entsoe.eu/>`_.
 
