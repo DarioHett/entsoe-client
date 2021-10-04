@@ -97,6 +97,7 @@ predefined queries are subset of the generic Query class, covering all examples 
     ...
     >>> predefined_query() == query()
     True
+
 -----
 
 | *ENTSO-E Client* enables straight-forward access to *all* of the data at `ENTSO-E Transparency Platform <https://transparency.entsoe.eu/>`_.
