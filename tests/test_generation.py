@@ -17,52 +17,52 @@ class IntegrationTest(unittest.TestCase):
             Generation.InstalledGenerationCapacityAggregated(
                 processType=ProcessType.A33,
                 psrType=PsrType.B16,
-                in_Domain=Area.CZ,
+                in_Domain=Area("CZ"),
                 periodStart=201512312300,
                 periodEnd=201612312300,
             ),
             Generation.InstalledGenerationCapacityPerUnit(
                 processType=ProcessType.A33,
                 psrType=PsrType.B02,
-                in_Domain=Area.CZ,
+                in_Domain=Area("CZ"),
                 periodStart=201512312300,
                 periodEnd=201612312300,
             ),
             Generation.DayAheadAggregatedGeneration(
-                in_Domain=Area.CZ, periodStart=201512312300, periodEnd=201612312300
+                in_Domain=Area("CZ"), periodStart=201512312300, periodEnd=201612312300
             ),
             Generation.DayAheadGenerationForecastsWindSolar(
-                in_Domain=Area.CZ,
+                in_Domain=Area("CZ"),
                 periodStart=201512312300,
                 periodEnd=201612312300,
                 psrType=PsrType.B16,
             ),
             Generation.CurrentGenerationForecastsWindSolar(
-                in_Domain=Area.BE,
+                in_Domain=Area("BE"),
                 periodStart=201912312300,
                 periodEnd=202012312300,
                 psrType=PsrType.B16,
             ),
             Generation.IntradayGenerationForecastsWindSolar(
-                in_Domain=Area.DE_AT_LU,
+                in_Domain=Area("DE_AT_LU"),
                 periodStart=201512312300,
                 periodEnd=201612312300,
                 psrType=PsrType.B16,
             ),
             Generation.ActualGenerationOutputPerGenerationUnit(
                 processType=ProcessType.A16,
-                in_Domain=Area.BE,
+                in_Domain=Area("BE"),
                 periodStart=202012302300,
                 periodEnd=202012312300,
             ),
             Generation.AggregatedGenerationPerType(
-                in_Domain=Area.DE_LU,
+                in_Domain=Area("DE_LU"),
                 periodStart=202012310000,
                 periodEnd=202012312300,
                 psrType=PsrType.B02,
             ),
             Generation.AggregatedFillingRateOfWaterReservoirsAndHydroStoragePlants(
-                in_Domain=Area.NO_1, periodStart=201512312300, periodEnd=201612312300
+                in_Domain=Area("NO_1"), periodStart=201512312300, periodEnd=201612312300
             ),
         ]
 

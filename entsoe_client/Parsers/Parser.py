@@ -125,7 +125,7 @@ class ParserFactory:
             else:
                 raise ValueError(document_type)
         else:
-            raise ValueError(tag)
+            raise NotImplementedError(tag)
 
 
 factory = ParserFactory()

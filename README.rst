@@ -57,8 +57,8 @@ want to formulate the query as a human-readable `string`.
     from entsoe_client.ParameterTypes import *
 
     Queries.Transmission.CapacityAllocatedOutsideEU(
-            out_Domain=Area.SK,
-            in_Domain=Area.UA_BEI,
+            out_Domain=Area('SK'),
+            in_Domain=Area('UA_BEI'),
             marketAgreementType=MarketAgreementType('Daily'), # Original code: A01
             auctionType=AuctionType('Explicit'), # Original code: A02
             auctionCategory=AuctionCategory('Hourly'), # Original code: A04
@@ -107,7 +107,7 @@ want to formulate the query as a human-readable `string`.
     client = ec.Client(api_key)
     parser = ec.Parser()
     query = ec.Queries.Generation.AggregatedGenerationPerType(
-        in_Domain=ec.ParameterTypes.Area.DE_LU,
+        in_Domain=ec.ParameterTypes.Area('DE_LU'),
         periodStart=202109050200,
         periodEnd=202109070200)
 

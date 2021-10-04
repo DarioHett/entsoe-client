@@ -95,9 +95,8 @@ class Query:
 
     @staticmethod
     def get_value_switch(parameter: Any):
-        if type(parameter) == Area:
-            return parameter.code
-        elif type(parameter) in [
+        if type(parameter) in [
+            Area,
             AuctionCategory,
             AuctionType,
             BusinessType,
