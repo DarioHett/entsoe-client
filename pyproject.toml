@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "entsoe-client"
-version = "0.1.3"
+version = "0.1.4"
 description = "Formulate human-readable queries and retrieve data from ENTSO-E into pandas.DataFrame format."
 readme="README.rst"
 license="MIT"
