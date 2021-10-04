@@ -16,28 +16,28 @@ class IntegrationTest(unittest.TestCase):
         cls.queries = [
             # All unvailable.
             # Outages.UnavailabilityOfConsumptionUnits(
-            #         biddingZone_Domain=Area.FR,
+            #         biddingZone_Domain=Area('FR'),
             #         periodStart=202108240000,
             #         periodEnd = 202108250000
             # ),
             Outages.UnavailabilityOfGenerationUnits(
-                biddingZone_Domain=Area.FR,
+                biddingZone_Domain=Area("FR"),
                 periodStart=202108240000,
                 periodEnd=202108250000,
             ),
             Outages.UnavailabilityOfProductionUnits(
-                biddingZone_Domain=Area.FR,
+                biddingZone_Domain=Area("FR"),
                 periodStart=202108240000,
                 periodEnd=202108250000,
             ),
             Outages.UnavailabilityOfOffshoreGridInfrastructure(
-                biddingZone_Domain=Area.DE_TENNET,
+                biddingZone_Domain=Area("DE_TENNET"),
                 periodStart=202108010000,
                 periodEnd=202108250000,
             ),
             Outages.UnavailabilityOfTransmissionInfrastructure(
-                in_Domain=Area.DE_50HZ,
-                out_Domain=Area.PL_CZ,
+                in_Domain=Area("DE_50HZ"),
+                out_Domain=Area("PL_CZ"),
                 periodStart=202108010000,
                 periodEnd=202108250000,
             ),
@@ -53,8 +53,10 @@ class IntegrationTest(unittest.TestCase):
         response = client.download(query)
         self.assertTrue(response.ok)
 
-        df = Parser.Parser.parse(response)
-        self.assertIsInstance(df, DataFrame)
+        # df = Parser.parse(response)
+        # self.assertIsInstance(df, DataFrame)
+        with self.assertRaises(NotImplementedError) as context:
+            Parser.parse(response)
 
     def test_all(self):
         client = Client(api_key=api_key)
@@ -63,8 +65,10 @@ class IntegrationTest(unittest.TestCase):
                 logging.debug(type(query).__name__)
                 print(type(query).__name__)
                 response = client.download(query)
-                df = Parser.Parser.parse(response)
-                self.assertIsInstance(df, DataFrame)
+                # df = Parser.parse(response)
+                # self.assertIsInstance(df, DataFrame)
+                with self.assertRaises(NotImplementedError) as context:
+                    Parser.parse(response)
 
 
 if __name__ == "__main__":

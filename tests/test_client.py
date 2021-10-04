@@ -14,7 +14,7 @@ from settings import *
 
 class ParameterTypeTest(unittest.TestCase):
     def test_types(self):
-        self.assertIsInstance(Area.DE_TENNET, Area)
+        self.assertIsInstance(Area("DE_TENNET"), Area)
         self.assertIsInstance(AuctionCategory.A01, AuctionCategory)
         self.assertIsInstance(AuctionType.A01, AuctionType)
         self.assertIsInstance(BusinessType.B01, BusinessType)
@@ -28,38 +28,40 @@ class ParameterTypeTest(unittest.TestCase):
 class QueryTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.q1 = Queries.Load.ActualTotalLoad(Area.CZ, "201512312300", "201612312300")
+        cls.q1 = Queries.Load.ActualTotalLoad(
+            Area("CZ"), "201512312300", "201612312300"
+        )
         cls.q2 = Queries.Transmission.ExpansionDismantlingProjects(
-            in_Domain=Area.SE_3,
-            out_Domain=Area.SE_4,
+            in_Domain=Area("SE_3"),
+            out_Domain=Area("SE_4"),
             periodStart="201412312300",
             periodEnd="201512312300",
             businessType=BusinessType.B01,
         )
         cls.q3 = Queries.Transmission.ForecastedCapacity(
             marketAgreementType=MarketAgreementType.A01,
-            in_Domain=Area.CZ,
-            out_Domain=Area.SK,
+            in_Domain=Area("CZ"),
+            out_Domain=Area("SK"),
             periodStart="201512312300",
             periodEnd="201612312300",
         )
         cls.q4 = Queries.Transmission.FlowbasedParameters(
             processType=ProcessType.A01,
-            in_Domain=Area.CWE,
-            out_Domain=Area.CWE,
+            in_Domain=Area("CWE"),
+            out_Domain=Area("CWE"),
             periodStart="201512312300",
             periodEnd="201601012300",
         )
         cls.q5 = Queries.Transmission.IntradayTransferLimits(
-            in_Domain=Area.GB,
-            out_Domain=Area.FR,
+            in_Domain=Area("GB"),
+            out_Domain=Area("FR"),
             periodStart="201512312300",
             periodEnd="201601312300",
         )
         cls.q6 = Queries.Transmission.ExplicitAllocationInformationRevenueonly(
             contract_MarketAgreementType=MarketAgreementType.A01,
-            in_Domain=Area.AT,
-            out_Domain=Area.CZ,
+            in_Domain=Area("AT"),
+            out_Domain=Area("CZ"),
             periodStart="201601012300",
             periodEnd="201601022300",
         )
@@ -69,7 +71,7 @@ class QueryTest(unittest.TestCase):
             Queries.Load.ActualTotalLoad()
 
     def test_init_success(self):
-        q = Queries.Load.ActualTotalLoad(Area.CZ, "201512312300", "201612312300")
+        q = Queries.Load.ActualTotalLoad(Area("CZ"), "201512312300", "201612312300")
         params = {
             "documentType": "A65",
             "processType": "A16",
@@ -85,8 +87,8 @@ class QueryTest(unittest.TestCase):
         query_params = dict((k, v) for (k, v) in self.q2().items() if v)
         query_params.pop("documentType", None)
         actual_params = dict(
-            in_Domain=Area.SE_3.code,
-            out_Domain=Area.SE_4.code,
+            in_Domain=Area("SE_3").name,
+            out_Domain=Area("SE_4").name,
             periodStart="201412312300",
             periodEnd="201512312300",
             businessType=BusinessType.B01.name,
@@ -112,57 +114,57 @@ class IntegrationTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.queries = [
-            Queries.Load.ActualTotalLoad(Area.CZ, "201512312300", "201612312300"),
+            Queries.Load.ActualTotalLoad(Area("CZ"), "201512312300", "201612312300"),
             Queries.Transmission.ExpansionDismantlingProjects(
-                in_Domain=Area.SE_3,
-                out_Domain=Area.SE_4,
+                in_Domain=Area("SE_3"),
+                out_Domain=Area("SE_4"),
                 periodStart="201412312300",
                 periodEnd="201512312300",
                 businessType=BusinessType.B01,
             ),
             Queries.Transmission.ForecastedCapacity(
                 marketAgreementType=MarketAgreementType.A01,
-                in_Domain=Area.CZ,
-                out_Domain=Area.SK,
+                in_Domain=Area("CZ"),
+                out_Domain=Area("SK"),
                 periodStart="201512312300",
                 periodEnd="201612312300",
             ),
             Queries.Transmission.FlowbasedParameters(
                 processType=ProcessType.A01,
-                in_Domain=Area.CWE,
-                out_Domain=Area.CWE,
+                in_Domain=Area("CWE"),
+                out_Domain=Area("CWE"),
                 periodStart="201512312300",
                 periodEnd="201601012300",
             ),
             Queries.Transmission.IntradayTransferLimits(
-                in_Domain=Area.GB,
-                out_Domain=Area.FR,
+                in_Domain=Area("GB"),
+                out_Domain=Area("FR"),
                 periodStart="201512312300",
                 periodEnd="201601312300",
             ),
             Queries.Transmission.ExplicitAllocationInformationRevenueonly(
                 contract_MarketAgreementType=MarketAgreementType.A01,
-                in_Domain=Area.AT,
-                out_Domain=Area.CZ,
+                in_Domain=Area("AT"),
+                out_Domain=Area("CZ"),
                 periodStart="201601012300",
                 periodEnd="201601022300",
             ),
             Queries.Query(
                 documentType=DocumentType.A85,
-                controlArea_Domain=Area.BE,
+                controlArea_Domain=Area("BE"),
                 periodStart="202001010100",
                 periodEnd="202007010000",
             ),
             Queries.Query(
                 documentType=DocumentType.A86,
-                controlArea_Domain=Area.BE,
+                controlArea_Domain=Area("BE"),
                 periodStart="202108220000",
                 periodEnd="202108221200",
             ),
             Queries.Query(
                 documentType=DocumentType.A86,
                 businessType=BusinessType.B33,
-                Area_Domain=Area.CZ,
+                Area_Domain=Area("CZ"),
                 periodStart="202108220000",
                 periodEnd="202108221200",
             ),
