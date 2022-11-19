@@ -2,14 +2,12 @@ import unittest
 
 import pandas as pd
 from pandas import DataFrame
+from settings import *
 
 import entsoe_client
-from entsoe_client import Client
-from entsoe_client.Parsers import Parser, XMLParser
-from entsoe_client.Parsers import ParserUtils
-from entsoe_client import Queries
+from entsoe_client import Client, Queries
 from entsoe_client.ParameterTypes import *
-from settings import *
+from entsoe_client.Parsers import Parser, ParserUtils, XMLParser
 
 
 class QueryTest(unittest.TestCase):

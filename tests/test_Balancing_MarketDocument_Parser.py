@@ -1,9 +1,10 @@
+import os
 import unittest
 
-import entsoe_client.Parsers.Balacing_MarketDocument_Parser
-from entsoe_client.Parsers import Parser, ZipParser, XMLParser, ParserFactory
 import pandas as pd
-import os
+
+import entsoe_client.Parsers.Balacing_MarketDocument_Parser
+from entsoe_client.Parsers import Parser, ParserFactory, XMLParser, ZipParser
 
 
 class test_Balancing_MarketDocument_Parser(unittest.TestCase):

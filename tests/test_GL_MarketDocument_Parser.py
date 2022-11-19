@@ -1,9 +1,10 @@
+import os
 import unittest
 
-import entsoe_client.Parsers.GL_MarketDocument_Parser
-from entsoe_client.Parsers import Parser, XMLParser, ZipParser, ParserFactory
 import pandas as pd
-import os
+
+import entsoe_client.Parsers.GL_MarketDocument_Parser
+from entsoe_client.Parsers import Parser, ParserFactory, XMLParser, ZipParser
 
 
 class test_GL_MarketDocument_Parser(unittest.TestCase):

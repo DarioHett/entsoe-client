@@ -6,12 +6,12 @@ client = ec.Client(api_key)
 parser = ec.Parser()
 
 gen_query = ec.Queries.Generation.AggregatedGenerationPerType(
-    in_Domain=ec.ParameterTypes.Area('DE_LU'),
+    in_Domain=ec.ParameterTypes.Area("DE_LU"),
     periodStart=202109050200,
     periodEnd=202109070200,
 )
 px_query = ec.Queries.Transmission.DayAheadPrices(
-    in_Domain=ec.ParameterTypes.Area('DE_LU'),
+    in_Domain=ec.ParameterTypes.Area("DE_LU"),
     periodStart=202109050200,
     periodEnd=202109070200,
 )

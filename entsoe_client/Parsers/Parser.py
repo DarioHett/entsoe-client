@@ -7,16 +7,14 @@ import requests
 from lxml import etree, objectify
 
 from entsoe_client.Parsers.Balacing_MarketDocument_Parser import (
-    Balancing_MarketDocument_Parser,
     Balancing_MarketDocument_FinancialExpensesAndIncomeForBalancing_Parser,
-)
-from entsoe_client.Parsers.GL_MarketDocument_Parser import GL_MarketDocument_Parser
-from entsoe_client.Parsers.Publication_MarketDocument_Parser import (
-    Publication_MarketDocument_Parser,
-)
-from entsoe_client.Parsers.TransmissionNetwork_MarketDocument_Parser import (
-    TransmissionNetwork_MarketDocument_Parser,
-)
+    Balancing_MarketDocument_Parser)
+from entsoe_client.Parsers.GL_MarketDocument_Parser import \
+    GL_MarketDocument_Parser
+from entsoe_client.Parsers.Publication_MarketDocument_Parser import \
+    Publication_MarketDocument_Parser
+from entsoe_client.Parsers.TransmissionNetwork_MarketDocument_Parser import \
+    TransmissionNetwork_MarketDocument_Parser
 
 
 class Parser:

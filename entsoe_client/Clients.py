@@ -1,10 +1,11 @@
 import logging
-from typing import Optional, Dict
+from typing import Dict, Optional
 
 import requests
 import tenacity
-from entsoe_client.Queries import Query
 from lxml import etree
+
+from entsoe_client.Queries import Query
 
 URL = "https://transparency.entsoe.eu/api"
 retry_count = 1

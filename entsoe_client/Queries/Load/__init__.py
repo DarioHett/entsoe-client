@@ -1,8 +1,5 @@
-from entsoe_client.Queries.Load.Load import (
-    Load,
-    ActualTotalLoad,
-    DayAheadTotalLoad,
-    WeekAheadTotalLoad,
-    MonthAheadTotalLoad,
-    YearAheadTotalLoad,
-)
+from entsoe_client.Queries.Load.Load import (ActualTotalLoad,
+                                             DayAheadTotalLoad, Load,
+                                             MonthAheadTotalLoad,
+                                             WeekAheadTotalLoad,
+                                             YearAheadTotalLoad)

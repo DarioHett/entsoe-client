@@ -1,8 +1,9 @@
+from typing import Any, Dict, Union
+
 import pandas as pd
+from pandas import Timestamp
 
 from entsoe_client.ParameterTypes import *
-from typing import Dict, Any, Union
-from pandas import Timestamp
 
 
 class Query:

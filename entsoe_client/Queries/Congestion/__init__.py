@@ -1,6 +1,2 @@
 from entsoe_client.Queries.Congestion.Congestion import (
-    Congestion,
-    Redispatching,
-    Countertrading,
-    CostsOfCongestionManagement,
-)
+    Congestion, CostsOfCongestionManagement, Countertrading, Redispatching)

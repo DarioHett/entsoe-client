@@ -2,12 +2,12 @@ import logging
 import unittest
 
 from pandas import DataFrame
+from settings import *
 
 from entsoe_client import Client
+from entsoe_client.ParameterTypes import *
 from entsoe_client.Parsers import Parser
 from entsoe_client.Queries import Outages, Query
-from entsoe_client.ParameterTypes import *
-from settings import *
 
 
 class IntegrationTest(unittest.TestCase):

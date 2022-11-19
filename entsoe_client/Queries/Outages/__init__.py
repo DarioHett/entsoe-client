@@ -1,8 +1,5 @@
 from entsoe_client.Queries.Outages.Outages import (
-    Outages,
-    UnavailabilityOfConsumptionUnits,
-    UnavailabilityOfTransmissionInfrastructure,
+    Outages, UnavailabilityOfConsumptionUnits, UnavailabilityOfGenerationUnits,
     UnavailabilityOfOffshoreGridInfrastructure,
-    UnavailabilityOfGenerationUnits,
     UnavailabilityOfProductionUnits,
-)
+    UnavailabilityOfTransmissionInfrastructure)
