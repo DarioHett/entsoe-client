@@ -24,6 +24,8 @@ import pandas as pd
 from entsoe_client import ParameterTypes
 
 df["quantity"] = df["quantity"].astype(float)
+resolution = "PT60M"
+px = px.query("`Period.resolution`==@resolution")
 px["price.amount"] = px["price.amount"].astype(float)
 
 consumption_mask = df["TimeSeries.outBiddingZone_Domain.mRID"].notna()
@@ -71,7 +73,8 @@ ax.xaxis.set_ticks(ticks[::each_n_label])
 ax.xaxis.set_ticklabels(ticklabels[::each_n_label])
 
 ## Plot prices on top of primary plot.
-_px = px.loc[production_by_type.index[production_by_type.index.isin(px.index)]]
+_px = px.loc[px.index.intersection(production_by_type.index)]
+
 ax2 = ax.twinx()
 ax2.plot(ticks[::4], _px["price.amount"], color="blue", marker="o")
 ax2.set_ylabel("EUR")
