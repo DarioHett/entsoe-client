@@ -2,8 +2,8 @@ from typing import Union
 
 import pandas as pd
 
-from entsoe_client.ParameterTypes import *
-from entsoe_client.Queries import Query
+from ...ParameterTypes import *
+from ..Query import Query
 
 
 class Generation(Query):

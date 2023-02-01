@@ -1,2 +1,9 @@
-from entsoe_client.Queries.Congestion.Congestion import (
-    Congestion, CostsOfCongestionManagement, Countertrading, Redispatching)
+from .Congestion import (Congestion, CostsOfCongestionManagement,
+                         Countertrading, Redispatching)
+
+__all__ = [
+    "Congestion",
+    "CostsOfCongestionManagement",
+    "Countertrading",
+    "Redispatching",
+]
