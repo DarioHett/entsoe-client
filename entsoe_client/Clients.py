@@ -5,7 +5,7 @@ import requests
 import tenacity
 from lxml import etree
 
-from entsoe_client.Queries import Query
+from .Queries.Query import Query
 
 URL = "https://transparency.entsoe.eu/api"
 retry_count = 1
