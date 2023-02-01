@@ -7,7 +7,7 @@ from lxml import etree
 
 from .Queries.Query import Query
 
-URL = "https://transparency.entsoe.eu/api"
+URL = "https://web-api.tp.entsoe.eu/api"
 retry_count = 1
 
 
