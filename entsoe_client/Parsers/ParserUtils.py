@@ -62,6 +62,12 @@ class Tree_to_DataFrame:
         df = df.assign(**meta_dict)
         return df
 
+def Root_to_DataFrame_fn() -> Callable:
+    def Root_to_DataFrame(Root: etree._Element) -> pd.DataFrame:
+        data = [ (elem.tag, elem.text) for elem in Root.getiterator() ]
+        return pd.DataFrame(data, columns=['Tag', 'Value'])
+
+    return Root_to_DataFrame
 
 def Period_to_DataFrame_fn(get_Period_data: Callable) -> Callable:
     def Period_to_DataFrame(Period: etree._Element) -> pd.DataFrame:
@@ -146,3 +152,4 @@ def get_Point_Financial_Price_data(Point: etree._Element) -> Dict:
 
 
 StandardPeriodParser = Period_to_DataFrame_fn(get_Period_data)
+StandardErrorDocumentParser = Root_to_DataFrame_fn()
