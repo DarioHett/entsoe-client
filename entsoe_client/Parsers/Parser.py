@@ -15,6 +15,8 @@ from entsoe_client.Parsers.Publication_MarketDocument_Parser import \
     Publication_MarketDocument_Parser
 from entsoe_client.Parsers.TransmissionNetwork_MarketDocument_Parser import \
     TransmissionNetwork_MarketDocument_Parser
+from entsoe_client.Parsers.Acknowledgment_MarketDocument_Parser import \
+    Acknowledgment_MarketDocument_Parser
 
 
 class Parser:
@@ -22,7 +24,7 @@ class Parser:
     def parse(response: requests.Response):
         response_type = response.headers["Content-Type"]
         content = response.content
-        if response_type == "text/xml":
+        if (response_type == "text/xml") or (response_type == "application/xml"):
             parser = XMLParser()
         elif response_type == "application/zip":
             parser = ZipParser()
@@ -57,6 +59,8 @@ class XMLParser:
         for elem in objectified_xml.getiterator():
             elem.tag = etree.QName(elem).localname
         etree.cleanup_namespaces(objectified_xml)
+        if objectified_xml.find("type") is None: # happens when a query is not fulfilled
+            objectified_xml["type"] = "Query error"
         return objectified_xml
 
     def parse(self, xml_document: bytes):
@@ -69,6 +73,8 @@ class XMLParser:
 class ParserFactory:
     @staticmethod
     def get_parser(tag: str, document_type: str):
+        if tag in ["Acknowledgement_MarketDocument"]:
+            return Acknowledgment_MarketDocument_Parser()
         if tag in ["GL_MarketDocument"]:
             if document_type in ["A65", "A70"]:  # Load
                 return GL_MarketDocument_Parser()
