@@ -1,9 +1,8 @@
 import unittest
+import os
 
-import lxml
 import pandas as pd
 from pandas import DataFrame
-from settings import *
 
 from entsoe_client import Client, Queries
 from entsoe_client.ParameterTypes import *
@@ -169,7 +168,7 @@ class IntegrationTest(unittest.TestCase):
         ]
 
     def test_integration(self):
-        client = Client(api_key=api_key)
+        client = Client(api_key=os.environ["API_KEY"])
         self.assertIsInstance(client, Client)
 
         query = self.queries[0]
@@ -182,7 +181,7 @@ class IntegrationTest(unittest.TestCase):
         self.assertIsInstance(df, DataFrame)
 
     def test_all(self):
-        client = Client(api_key=api_key)
+        client = Client(api_key=os.environ["API_KEY"])
         for query in self.queries:
             with self.subTest(type(query).__name__):
                 response = client.download(query)
