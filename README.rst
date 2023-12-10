@@ -1,3 +1,8 @@
+Disclaimer: This library was written to experiment with various concepts. 
+The submodules `entsoe_client.ParameterTypes` and `entsoe_client.Queries` are straight forward.
+To refactor `entsoe_client.Parsers`, the next steps would be to establish fixtures, 
+standardize flattening of the XML tree and decouple the records from the DataFrame library.
+
 ===============
 ENTSO-E Client
 ===============
