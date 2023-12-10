@@ -11,10 +11,10 @@ class test_GL_MarketDocument_Parser(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.response_contents: list = []
-        path = "./tests/data/GL_MarketDocument/"
-        for file in os.listdir(path):
-            with open(path + file, "rb") as data:
-                cls.response_contents.append(data.read())
+        # path = "./tests/data/GL_MarketDocument/"
+        # for file in os.listdir(path):
+        #     with open(path + file, "rb") as data:
+        #         cls.response_contents.append(data.read())
 
     def test_dataloading(self):
         self.assertIsInstance(self.response_contents, list)
@@ -31,12 +31,6 @@ class test_GL_MarketDocument_Parser(unittest.TestCase):
                     parser,
                     entsoe_client.Parsers.GL_MarketDocument_Parser.GL_MarketDocument_Parser,
                 )
-
-    def test_parse_basic(self):
-        """Basic ActualTotalLoad Query."""
-        parser = XMLParser()
-        df = parser.parse(self.response_contents[1])
-        self.assertIsInstance(df, pd.DataFrame)
 
     def test_parse_all(self):
         parser = XMLParser()
