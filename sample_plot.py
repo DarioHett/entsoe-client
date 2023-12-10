@@ -1,8 +1,8 @@
 # Extract-Load data using ENTSO-E Client.
 import entsoe_client as ec
-from settings import api_key
+import os
 
-client = ec.Client(api_key)
+client = ec.Client(os.environ['API_KEY'])
 parser = ec.Parser()
 
 gen_query = ec.Queries.Generation.AggregatedGenerationPerType(
@@ -44,7 +44,8 @@ ec.ParameterTypes.BusinessType.help()
 import matplotlib
 import matplotlib.pyplot as plt
 
-matplotlib.style.use("seaborn-ticks")
+style = next(filter(lambda style: style.endswith("ticks"), filter(lambda style: style.startswith("seasbond"), plt.style.available)))
+matplotlib.style.use(style)
 plot_params = dict(
     stacked=True,
     grid=True,
