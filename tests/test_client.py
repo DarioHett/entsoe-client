@@ -73,8 +73,8 @@ class QueryTest(unittest.TestCase):
             "documentType": "A65",
             "processType": "A16",
             "outBiddingZone_Domain": "10YCZ-CEPS-----N",
-            "periodStart": "201512312300",
-            "periodEnd": "201612312300",
+            "periodStart": 201512312300,
+            "periodEnd": 201612312300,
         }
         self.assertIsInstance(q, Queries.Query)
         self.assertIsInstance(q(), dict)
@@ -86,8 +86,8 @@ class QueryTest(unittest.TestCase):
         actual_params = dict(
             in_Domain=Area("SE_3").name,
             out_Domain=Area("SE_4").name,
-            periodStart="201412312300",
-            periodEnd="201512312300",
+            periodStart=201412312300,
+            periodEnd=201512312300,
             businessType=BusinessType.B01.name,
         )
         self.assertEqual(query_params, actual_params)
