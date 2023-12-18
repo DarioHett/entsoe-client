@@ -17,6 +17,8 @@ from entsoe_client.Parsers.TransmissionNetwork_MarketDocument_Parser import \
     TransmissionNetwork_MarketDocument_Parser
 from entsoe_client.Parsers.Acknowledgment_MarketDocument_Parser import \
     Acknowledgment_MarketDocument_Parser
+from entsoe_client.Parsers.Outages_MarketDocument_Parser import \
+    Outages_MarketDocument_Parser
 
 
 class Parser:
@@ -45,11 +47,11 @@ class ZipParser:
         return xml_document_list
 
     def parse(self, zip_archive: bytes):
-        parser = XMLParser()
         xml_documents = self.unpack_archive(zip_archive)
-        dfs = [parser.parse(xml_document) for xml_document in xml_documents]
-        df = pd.concat(dfs, axis=0)
-        return df
+        deserailized_xmls = [XMLParser.deserialize_xml(elem) for elem in xml_documents]
+        parser = factory.get_parser(deserailized_xmls[0].tag, deserailized_xmls[0].type.text)
+        parser.set_objectified_input_xml(deserailized_xmls)
+        return parser.parse()
 
 
 class XMLParser:
@@ -59,7 +61,7 @@ class XMLParser:
         for elem in objectified_xml.getiterator():
             elem.tag = etree.QName(elem).localname
         etree.cleanup_namespaces(objectified_xml)
-        if objectified_xml.find("type") is None: # happens when a query is not fulfilled
+        if objectified_xml.find("type") is None:  # happens when a query is not fulfilled
             objectified_xml["type"] = "Query error"
         return objectified_xml
 
@@ -75,7 +77,9 @@ class ParserFactory:
     def get_parser(tag: str, document_type: str):
         if tag in ["Acknowledgement_MarketDocument"]:
             return Acknowledgment_MarketDocument_Parser()
-        if tag in ["GL_MarketDocument"]:
+        elif tag in ["Unavailability_MarketDocument"]:
+            return Outages_MarketDocument_Parser()
+        elif tag in ["GL_MarketDocument"]:
             if document_type in ["A65", "A70"]:  # Load
                 return GL_MarketDocument_Parser()
             elif document_type in [
