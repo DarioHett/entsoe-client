@@ -11,7 +11,6 @@ from entsoe_client.Queries import Outages, Query
 
 
 class IntegrationTest(unittest.TestCase):
-    os.environ["API_KEY"] = '7c446d21-2267-42a1-8bd0-da76b7c6d9ae'
     @classmethod
     def setUpClass(cls) -> None:
         cls.queries = [
