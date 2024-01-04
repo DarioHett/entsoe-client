@@ -78,7 +78,7 @@ def Period_to_DataFrame_fn(get_Period_data: Callable) -> Callable:
         Errors would occur at DataFrame construction.
         """
         index = get_Period_index(Period)
-        data = get_Period_data(Period)
+        data = get_Period_data(Period, length=len(index))
         assert len(data) == len(index)
         df = pd.DataFrame(data=data, index=index)
 
@@ -117,12 +117,32 @@ resolution_map: Dict = {
 }
 
 
-def get_Period_data(Period: etree._Element) -> List[Dict]:
+def check_period_data_missing(data: list[Dict[str, str]]) -> List[Dict]:
+    """
+    Checks for missing data in the data list (missing position from the api response)
+    """
+    data.sort(key=lambda x: int(x['position']))
+    complete_data = {int(pos['position']): pos['quantity'] for pos in data}
+    for position in range(1, max(complete_data) + 1):
+        if position not in complete_data:
+            prev_position = max(filter(lambda x: x < position, complete_data), default=0)
+            data.append({'position': str(position), 'quantity': complete_data[prev_position]})
+    data.sort(key=lambda x: int(x['position']))
+    return data
+
+
+def get_Period_data(Period: etree._Element,
+                    length: int) -> List[Dict]:
     points = Period.xpath("./Point", namespaces=Period.nsmap)
     data = [
         dict([(datum.tag, datum.text) for datum in point.iterchildren()])
         for point in points
     ]
+    data = check_period_data_missing(data=data)
+    # check for missing positions if the length of the index is longer that the data (and no position is missing
+    # inside the data list)
+    if length != len(data):
+        data += [{'position': str(i + 1), 'quantity': data[-1]['quantity']} for i in range(length - len(data))]
     return data
 
 
