@@ -1,13 +1,23 @@
 from entsoe_client.Utils import ParameterEnum
 
-
 class BusinessType(str, ParameterEnum):
+    A01 = ("Production",)
+    A04 = ("Consumption",)
+    A19 = ("Balance energy deviation",)
     A25 = ("General Capacity Information",)
     A29 = ("Already allocated capacity(AAC)",)
+    A37 = ("Installed generation",)
     A43 = ("Requested capacity(without price)",)
     A46 = ("System Operator redispatching",)
     A53 = ("Planned maintenance ",)
     A54 = ("Unplanned outage A85 Internal redispatch",)
+    A60 = ("Minimum possible",)
+    A61 = ("Maximum possible",)
+    A85 = ("Internal redispatch",)
+    A91 = ("Positive forecast margin (if installed capacity > load forecast)",)
+    A92 = ("Negative forecast margin (if load forecast > installed capacity)",)
+    A93 = ("Wind generation",)
+    A94 = ("Solar generation",)
     A95 = ("Frequency containment reserve",)
     A96 = ("Automatic frequency restoration reserve",)
     A97 = ("Manual frequency restoration reserve",)
@@ -23,6 +33,8 @@ class BusinessType(str, ParameterEnum):
     B10 = ("Congestion income",)
     B11 = ("Production unit",)
     B33 = ("Area Control Error",)
+    B74 = ("Offer",)
+    B75 = ("Need",)
     B95 = ("Procured capacity",)
     C22 = ("Shared Balancing Reserve Capacity",)
     C23 = ("Share of reserve capacity",)
