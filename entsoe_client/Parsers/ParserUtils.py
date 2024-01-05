@@ -117,16 +117,17 @@ resolution_map: Dict = {
 }
 
 
-def check_period_data_missing(data: list[Dict[str, str]]) -> List[Dict]:
+def check_period_data_missing(data: list[Dict[str, str]],
+                              key: str) -> List[Dict]:
     """
     Checks for missing data in the data list (missing position from the api response)
     """
     data.sort(key=lambda x: int(x['position']))
-    complete_data = {int(pos['position']): pos['quantity'] for pos in data}
+    complete_data = {int(pos['position']): pos[key] for pos in data}
     for position in range(1, max(complete_data) + 1):
         if position not in complete_data:
             prev_position = max(filter(lambda x: x < position, complete_data), default=0)
-            data.append({'position': str(position), 'quantity': complete_data[prev_position]})
+            data.append({'position': str(position), key: complete_data[prev_position]})
     data.sort(key=lambda x: int(x['position']))
     return data
 
@@ -138,11 +139,13 @@ def get_Period_data(Period: etree._Element,
         dict([(datum.tag, datum.text) for datum in point.iterchildren()])
         for point in points
     ]
-    data = check_period_data_missing(data=data)
+    key = list(data[0].keys())[1]
+    data = check_period_data_missing(data=data,
+                                     key=key)
     # check for missing positions if the length of the index is longer that the data (and no position is missing
     # inside the data list)
     if length != len(data):
-        data += [{'position': str(i + 1), 'quantity': data[-1]['quantity']} for i in range(length - len(data))]
+        data += [{'position': str(i + 1), key: data[-1][key]} for i in range(length - len(data))]
     return data
 
 
