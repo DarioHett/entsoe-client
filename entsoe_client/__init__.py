@@ -3,5 +3,5 @@ from .Clients import Client
 from .Parsers.Parser import Parser
 from .Queries.Query import Query
 
-__version__ = "0.2.2"
+__version__ = "0.2.4"
 __all__ = ["Client", "Query", "Parser", "Queries", "Parsers"]
