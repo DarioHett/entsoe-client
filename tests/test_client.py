@@ -97,6 +97,8 @@ class ParserTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mock_period_str = b'<Period xmlns="urn:iec62325.351:tc57wg16:451-6:balancingdocument:3:0">\n\t\t\t<timeInterval>\n\t\t\t\t<start>2018-02-28T23:45Z</start>\n\t\t\t\t<end>2018-03-01T00:00Z</end>\n\t\t\t</timeInterval>\n\t\t\t<resolution>PT15M</resolution>\n\t\t\t<Point>\n\t\t\t\t<position>1</position>\n\t\t\t\t<quantity>11</quantity>\n\t\t\t</Point>\n\t\t</Period>\n\t\t'
+        cls.mock_period_faulty = b'<Period xmlns="urn:iec62325.351:tc57wg16:451-6:balancingdocument:3:0">\n\t\t\t<timeInterval>\n\t\t\t\t<start>2018-02-28T23:30Z</start>\n\t\t\t\t<end>2018-03-01T00:00Z</end>\n\t\t\t</timeInterval>\n\t\t\t<resolution>PT15M</resolution>\n\t\t\t<Point>\n\t\t\t\t<position>1</position>\n\t\t\t\t<quantity>11</quantity>\n\t\t\t</Point>\n\t\t</Period>\n\t\t'
+        cls.mock_period_faulty_price = b'<Period xmlns="urn:iec62325.351:tc57wg16:451-6:balancingdocument:3:0">\n\t\t\t<timeInterval>\n\t\t\t\t<start>2018-02-28T23:15Z</start>\n\t\t\t\t<end>2018-03-01T00:00Z</end>\n\t\t\t</timeInterval>\n\t\t\t<resolution>PT15M</resolution>\n\t\t\t<Point>\n\t\t\t\t<position>1</position>\n\t\t\t\t<price.amount>11</price.amount>\n\t\t\t</Point>\n\t\t</Period>\n\t\t'
 
     def test_period_to_dataframe(self):
         mock_period = XMLParser.deserialize_xml(self.mock_period_str)
@@ -105,6 +107,25 @@ class ParserTest(unittest.TestCase):
         )
         df = Period_to_DataFrame(mock_period)
         self.assertIsInstance(df, pd.DataFrame)
+
+    def test_missing_position(self):
+        mock_period = XMLParser.deserialize_xml(self.mock_period_faulty)
+        period_to_dataframe = ParserUtils.Period_to_DataFrame_fn(
+            ParserUtils.get_Period_data
+        )
+        df = period_to_dataframe(mock_period)
+        self.assertIsInstance(df, pd.DataFrame)
+        self.assertEqual(len(df), 2)
+
+    def test_missing_position_price(self):
+        mock_period = XMLParser.deserialize_xml(self.mock_period_faulty_price)
+        period_to_dataframe = ParserUtils.Period_to_DataFrame_fn(
+            ParserUtils.get_Period_data
+        )
+        df = period_to_dataframe(mock_period)
+        self.assertIsInstance(df, pd.DataFrame)
+        self.assertEqual(len(df), 3)
+        self.assertEqual(df.columns[1], 'price.amount')
 
 
 class IntegrationTest(unittest.TestCase):
