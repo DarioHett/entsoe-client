@@ -19,6 +19,8 @@ from entsoe_client.Parsers.Acknowledgment_MarketDocument_Parser import \
     Acknowledgment_MarketDocument_Parser
 from entsoe_client.Parsers.Outages_MarketDocument_Parser import \
     Outages_MarketDocument_Parser
+from entsoe_client.Parsers.Unavailability_MarketDocument_parser import \
+    Unavailability_MarketDocument_Parser
 
 
 class Parser:
@@ -47,11 +49,11 @@ class ZipParser:
         return xml_document_list
 
     def parse(self, zip_archive: bytes):
+        parser = XMLParser()
         xml_documents = self.unpack_archive(zip_archive)
-        deserailized_xmls = [XMLParser.deserialize_xml(elem) for elem in xml_documents]
-        parser = factory.get_parser(deserailized_xmls[0].tag, deserailized_xmls[0].type.text)
-        parser.set_objectified_input_xml(deserailized_xmls)
-        return parser.parse()
+        dfs = [parser.parse(xml_document) for xml_document in xml_documents]
+        df = pd.concat(dfs, axis=0)
+        return df
 
 
 class XMLParser:
@@ -78,7 +80,12 @@ class ParserFactory:
         if tag in ["Acknowledgement_MarketDocument"]:
             return Acknowledgment_MarketDocument_Parser()
         elif tag in ["Unavailability_MarketDocument"]:
-            return Outages_MarketDocument_Parser()
+            if document_type in ["A53"]:
+                return Unavailability_MarketDocument_Parser()
+            elif document_type in ["A76", "A78", "A79", "A80", "A77"]:
+                return Outages_MarketDocument_Parser()
+            else:
+                raise ValueError(document_type)
         elif tag in ["GL_MarketDocument"]:
             if document_type in ["A65", "A70"]:  # Load
                 return GL_MarketDocument_Parser()
