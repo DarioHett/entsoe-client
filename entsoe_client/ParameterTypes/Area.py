@@ -93,5 +93,6 @@ Area = ParameterEnum(
         ("10Y1001A1001A869", "UA_DOBTPP"),
         ("10YUA-WEPS-----0", "UA_BEI"),
         ("10Y1001C--000182", "UA_IPS"),
+        ("10Y1001C--00100H", "XK")
     ],
 )
