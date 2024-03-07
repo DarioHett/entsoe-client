@@ -10,6 +10,7 @@ The root node holds meta-data on the global parameters of the query.
 
 A minimal, trivial parser would purely unroll such structure recursively.
 """
+import datetime
 from typing import Callable, Dict, List, Any
 
 import pandas as pd
@@ -188,8 +189,11 @@ def get_index(Period: etree._Element) -> pd.Index:
     start = data['start']
     end = data['end']
     resolution = Period.xpath("./TimeSeries/Available_Period/resolution")
-    index = pd.date_range(start, end, freq=resolution_map[resolution[0]])
-    index = index[:-1] if index.size > 1 else index
+    if not resolution:
+        index = [pd.to_datetime(datetime.datetime.now().replace(minute=0, second=0, microsecond=0), )]
+    else:
+        index = pd.date_range(start, end, freq=resolution_map[resolution[0]])
+        index = index[:-1] if index.size > 1 else index
     return index
 
 
@@ -203,12 +207,16 @@ def get_data(Period: etree._Element) -> tuple[pd.DatetimeIndex, list[dict[Any, A
         dict([(datum.tag, datum.text) for datum in point.iterchildren()])
         for point in points
     ]
-    new_ind = []
-    for elem in data:
-        new_ind.append(index[int(elem['position']) - 1])
-    new_ind = pd.DatetimeIndex(new_ind)
-
-    return new_ind, data
+    if not data:
+        data = [{'position': -1,
+                'quantity': 0}]
+        return index, data
+    else:
+        new_ind = []
+        for elem in data:
+            new_ind.append(index[int(elem['position']) - 1])
+        new_ind = pd.DatetimeIndex(new_ind)
+        return new_ind, data
 
 
 def get_resource(Period: etree._Element) -> Dict:
